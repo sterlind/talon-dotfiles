@@ -1,0 +1,43 @@
+Visual Studio Code, Code
+WindowsTerminal.exe, Terminal
+Microsoft Visual Studio 2022, Visual Studio
+Windows Explorer, Explorer
+Windows Command Processor, Command
+Microsoft Edge, Edge
+Google Chrome, Chrome
+
+talon.exe,
+ConEmuC64.exe,
+conhost.exe,
+ShellExperienceHost.exe,
+StartMenuExperienceHost.exe,
+SearchApp.exe,
+TextInputHost.exe,
+LogiOverlay.exe,
+LogiOptions.exe (UNICODE),
+LogiOptionsMgr.exe (UNICODE),
+RuntimeBroker.exe,
+Runtime Broker,
+ApplicationFrameHost.exe,
+PerfWatson2.exe,
+ServiceHub.IdentityHost.exe,
+rundll32.exe,
+dllhost.exe,
+smartscreen.exe,
+csrss.exe,
+WWAHost.exe,
+OpenConsole.exe,
+svchost.exe,
+wslhost.exe,
+Host Process for Windows Services,
+Windows Shell Experience Host,
+Logi Overlay,
+Search application,
+Application Frame Host,
+Talon,
+Console Window Host,
+Windows host process (Rundll32),
+Microsoft WWA Host,
+Windows Defender SmartScreen,
+Microsoft Windows Subsystem for Linux Background Host,
+NVDisplay.Container.exe,
