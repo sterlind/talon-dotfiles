@@ -1,2 +1,6 @@
 <user.letter>: key(letter)
-<user.number_key>: key(number_key)
+<user.key_number>: key(number_key)
+<user.key_symbol>: key(key_symbol)
+<user.key_modifiers> <user.key_unmodified>: key("{key_modifiers}-{key_unmodified}")
+key <user.key_unmodified>: key(key_unmodified)
+space: key(" ")

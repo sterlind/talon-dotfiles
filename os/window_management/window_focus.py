@@ -29,7 +29,7 @@ def parse_name(name):
     if " - " in name:
         name = name.rsplit(" - ", 1)[0]
     name = re.sub(r"[^a-zA-Z0-9]", " ", name)
-    name = actions.user.de_camel(name)
+    #name = actions.user.de_camel(name)
     return name
 
 
