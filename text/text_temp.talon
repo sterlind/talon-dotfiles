@@ -1,2 +1,3 @@
-phrase <word>+: user.insert_many(word_list)
-word <word>: "{word}"
+phrase <user.words>$: "{words}"
+phrase <user.words> over: "{words}"
+word <user.word>: "{word}"

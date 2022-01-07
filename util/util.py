@@ -1,6 +1,5 @@
 from collections.abc import Iterable
 
-
 def merge(*args) -> dict:
     """Merge dictionaries and lists"""
     result = {}
