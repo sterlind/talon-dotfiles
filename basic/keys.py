@@ -105,8 +105,8 @@ ctx.lists["self.key_symbol"] = {
     "amper":            "&",
     "at sign":          "@",
 
-    "quote":            '"',
-    "apostrophe":       "'",
+    "dubquote":            '"',
+    "quote":       "'",
     "brick":            "`",
 
     "slash":            "/",
@@ -148,12 +148,12 @@ def letter(m) -> str:
     "One letter key"
     return m.letter
 
-@mod.capture(rule="{self.number_key}")
-def number_key(m) -> str:
+@mod.capture(rule="{self.key_number}")
+def key_number(m) -> str:
     "One number key"
-    return m.number_key
+    return m.key_number
 
-@mod.capture(rule="( <self.letter> | <self.key_number> | <self.key_symbol>)")
+@mod.capture(rule="({self.letter} | {self.key_number} | {self.key_symbol})")
 def any_alphanumeric_key(m) -> str:
     "any alphanumeric key"
     return str(m)
