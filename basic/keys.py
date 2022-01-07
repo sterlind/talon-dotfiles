@@ -60,6 +60,11 @@ def number_key(m) -> str:
     "One number key"
     return m.number_key
 
+@mod.capture(rule="( <self.letter> | <self.number_key>)")
+def any_alphanumeric_key(m) -> str:
+    "any alphanumeric key"
+    return str(m)
+
 ctx = Context()
 ctx.lists["self.letter"] = alphabet
 ctx.lists["self.number_key"] = dict(zip(phonetic_digits, [str(k) for k in range(10)]))
