@@ -1,4 +1,4 @@
-from talon import Context, Module
+from talon import Context, Module, actions
 
 ctx = Context()
 mod = Module()
@@ -12,3 +12,4 @@ and app.exe: Code.exe
 ctx.matches = r"""
 app: vscode
 """
+ctx.tags = ["user.tabs"]
