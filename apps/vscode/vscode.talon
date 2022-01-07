@@ -1,6 +1,7 @@
 app: vscode
 -
 tag(): user.tabs
+tag(): user.git
 
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
 action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")
