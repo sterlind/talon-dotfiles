@@ -29,3 +29,6 @@ class Actions:
         "Insert multiple strings"
         for string in strings:
             actions.insert(string)
+    def insert_formatted(text: str, format: str) -> None:
+        "Insert formatted"
+        actions.insert(actions.user.format_text(text, format))
