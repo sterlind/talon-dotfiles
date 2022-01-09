@@ -23,9 +23,12 @@ ctx.lists["self.keywords"] = [
     "dot"
 ]
 
-@mod.capture(rule="<user.text> [{user.keywords}]")
+@mod.capture(rule="<user.letter_or_number> | <user.text> [{user.keywords}]")
 def name_syntax(m) -> str:
-    return actions.user.format_text(str(m.text), "SNAKE_CASE")
+    try:
+        return m.letter_or_number
+    except AttributeError:
+        return actions.user.format_text(str(m.text), "SNAKE_CASE")
 
 @mod.capture(rule=" <user.name_syntax> [type {user.known_types}]")
 def parameter_syntax(m) -> str:

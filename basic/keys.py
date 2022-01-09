@@ -153,6 +153,11 @@ def key_number(m) -> str:
     "One number key"
     return m.key_number
 
+@mod.capture(rule="{self.letter} | {self.key_number}")
+def letter_or_number(m) -> str:
+    "One number key"
+    return str(m)
+
 @mod.capture(rule="({self.letter} | {self.key_number} | {self.key_symbol})")
 def any_alphanumeric_key(m) -> str:
     "any alphanumeric key"
