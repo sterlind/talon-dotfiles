@@ -10,5 +10,6 @@ tag: user.python
 # quick [brown]: "quick"
 # brown [fox]: "brown fox"
 
-funk <user.name_syntax> takes <user.arguments_syntax>: user.code_function(name_syntax, arguments_syntax)
+funk <user.name_syntax> takes <user.parameters_syntax>: user.code_function(name_syntax, parameters_syntax)
 funk <user.name_syntax>$: user.code_function(name_syntax)
+call <user.compound_name_syntax>: user.insert_snippet("{compound_name_syntax}($0)")

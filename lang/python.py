@@ -19,7 +19,8 @@ ctx.lists["self.keywords"] = [
     "type",
     "arg",
     "funk",
-    "and"
+    "and",
+    "dot"
 ]
 
 @mod.capture(rule="<user.text> [{user.keywords}]")
@@ -27,15 +28,23 @@ def name_syntax(m) -> str:
     return actions.user.format_text(str(m.text), "SNAKE_CASE")
 
 @mod.capture(rule=" <user.name_syntax> [type {user.known_types}]")
-def argument_syntax(m) -> str:
+def parameter_syntax(m) -> str:
     try:
         return f"{m.name_syntax}: {m.known_types}"
     except AttributeError:
         return m.name_syntax
 
-@mod.capture(rule="<user.argument_syntax> ([and] <user.argument_syntax>)*")
+@mod.capture(rule="<user.parameter_syntax> ([and] <user.parameter_syntax>)*")
+def parameters_syntax(m) -> List[str]:
+    return m.parameter_syntax_list
+
+@mod.capture(rule="<user.name_syntax> ([dot] <user.name_syntax>)*")
+def compound_name_syntax(m) -> str:
+    return ".".join(m.name_syntax_list)
+
+@mod.capture(rule="<user.compound_name_syntax> ([and] <user.compound_name_syntax>)*")
 def arguments_syntax(m) -> List[str]:
-    return m.argument_syntax_list
+    return m.compound_name_syntax_list
 
 @mod.action_class
 class UserActions:
