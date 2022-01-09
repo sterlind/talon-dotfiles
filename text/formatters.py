@@ -8,6 +8,7 @@ formatters_list = {
     "NOOP": lambda text: text,
     "ALL_CAPS": lambda text: text.upper(),
     "PROPER_CASE": lambda text: format_words(text, split, "", capitalize, lower),
+    "SENTENCE_CASE": lambda text: format_words(text, split, " ", capitalize, lower),
     "DOUBLE_QUOTED_STRING": lambda text: f"\"{text}\"",
     "SNAKE_CASE": lambda text: format_words(text, split, "_", lower, lower),
     "HAMMER_CASE": lambda text: format_words(text, split, "", capitalize, capitalize),
@@ -16,6 +17,7 @@ formatters_list = {
 
 mod.list("formatter_code", desc="Code formatters")
 ctx.lists["self.formatter_code"] = {
+    "say": "SENTENCE_CASE",
     "proper": "PROPER_CASE",
     "upper": "ALL_CAPS",
     "string": "DOUBLE_QUOTED_STRING",

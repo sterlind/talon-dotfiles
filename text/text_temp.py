@@ -5,18 +5,22 @@ from functools import reduce
 mod = Module()
 ctx = Context()
 
-@mod.capture(rule="({self.vocabulary} | <word>)")
+@mod.capture(rule="(abbreviate|brief|abbrieve) {user.abbreviation}")
+def abbreviated(m) -> str:
+    return m.abbreviation
+    
+@mod.capture(rule="({self.vocabulary} | <user.abbreviated> | <word>)")
 def word(m) -> str:
     "Single word"
     words = capture_to_words(m)
     return words[0]
 
-@mod.capture(rule="({self.vocabulary} | <phrase>)+")
+@mod.capture(rule="(<user.word>)+")
 def words(m) -> str:
     "Multiple words"
     return " ".join(capture_to_words(m))
 
-@mod.capture(rule="({self.vocabulary} | <phrase>)+")
+@mod.capture(rule="(<user.word>)+")
 def text(m) -> str:
     "text comprising multiple words"
     return " ".join(capture_to_words(m))
