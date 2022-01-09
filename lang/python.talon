@@ -15,5 +15,6 @@ funk <user.name_syntax>$: user.code_function(name_syntax)
 call <user.compound_name_syntax>: user.insert_snippet("{compound_name_syntax}($0)")
 return <user.value_syntax>: "return {value_syntax}"
 format: user.insert_snippet("f\"$0\"")
-type <user.type_syntax>: "{type_syntax}"
+# type <user.type_syntax>: "{type_syntax}"
+set <user.compound_name_syntax> to: user.insert_snippet("{compound_name_syntax} = $1")
 try: user.insert_snippet("try:\n\t$1\nexcept $2:\n\t$3")

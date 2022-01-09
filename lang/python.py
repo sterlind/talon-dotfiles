@@ -29,6 +29,7 @@ ctx.lists["self.keywords"] = [
     "call"
 ]
 
+
 @mod.capture(rule="{user.complex_type} of {user.primitive_type}")
 def complex_type_syntax(m) -> str:
     return f"{m.complex_type}[{m.primitive_type}]"
@@ -44,10 +45,10 @@ def name_syntax(m) -> str:
     except AttributeError:
         return actions.user.format_text(str(m.text), "SNAKE_CASE")
 
-@mod.capture(rule=" <user.name_syntax> [type {user.known_types}]")
+@mod.capture(rule=" <user.name_syntax> [type <user.type_syntax>]")
 def parameter_syntax(m) -> str:
     try:
-        return f"{m.name_syntax}: {m.known_types}"
+        return f"{m.name_syntax}: {m.type_syntax}"
     except AttributeError:
         return m.name_syntax
 
