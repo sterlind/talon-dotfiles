@@ -7,10 +7,16 @@ ctx.matches = r"""
 tag: user.python
 """
 
-mod.list("known_types", "known types")
-ctx.lists["self.known_types"] = {
+mod.list("primitive_type", "known primitive types")
+ctx.lists["self.primitive_type"] = {
     "string": "str",
     "int": "int"
+}
+
+mod.list("complex_type", "known complex types")
+ctx.lists["self.complex_type"] = {
+    "list": "list",
+    "set": "set"
 }
 
 mod.list("keywords", "grammar keywords")
@@ -22,6 +28,14 @@ ctx.lists["self.keywords"] = [
     "dot",
     "call"
 ]
+
+@mod.capture(rule="{user.complex_type} of {user.primitive_type}")
+def complex_type_syntax(m) -> str:
+    return f"{m.complex_type}[{m.primitive_type}]"
+
+@mod.capture(rule="{user.primitive_type} | <user.complex_type_syntax>")
+def type_syntax(m) -> str:
+    return str(m)
 
 @mod.capture(rule="<user.letter_or_number> | <user.text> [{user.keywords}]")
 def name_syntax(m) -> str:
