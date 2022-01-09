@@ -15,6 +15,11 @@ def word(m) -> str:
 def words(m) -> str:
     "Multiple words"
     return " ".join(capture_to_words(m))
+
+@mod.capture(rule="({self.vocabulary} | <phrase>)+")
+def text(m) -> str:
+    "text comprising multiple words"
+    return " ".join(capture_to_words(m))
     
 def capture_to_words(m):
     def parse(w):

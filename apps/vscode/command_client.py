@@ -284,10 +284,24 @@ def read_json_with_timeout(path: str) -> Any:
 
 @mod.action_class
 class Actions:
-    def vscode(command_id: str):
+    def vscode(
+        command_id: str,
+        arg1: Any = NotSet,
+        arg2: Any = NotSet,
+        arg3: Any = NotSet,
+        arg4: Any = NotSet,
+        arg5: Any = NotSet
+    ):
         """Execute command via vscode command server, if available, or fallback
         to command palette."""
-        run_vscode_command(command_id)
+        run_vscode_command(
+            command_id,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
+        )
 
     def vscode_and_wait(command_id: str):
         """Execute command via vscode command server, if available, and wait

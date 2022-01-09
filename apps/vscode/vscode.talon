@@ -23,3 +23,5 @@ bar source:                      user.vscode("workbench.view.scm")
 bar file:                        user.vscode("workbench.files.action.showActiveFileInExplorer")
 ref last:                        user.vscode("references-view.prev")
 ref next:                        user.vscode("references-view.next")
+
+next:                            user.vscode("jumpToNextSnippetPlaceholder")
