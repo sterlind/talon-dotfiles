@@ -13,3 +13,4 @@ tag: user.python
 funk <user.name_syntax> takes <user.parameters_syntax>: user.code_function(name_syntax, parameters_syntax)
 funk <user.name_syntax>$: user.code_function(name_syntax)
 call <user.compound_name_syntax>: user.insert_snippet("{compound_name_syntax}($0)")
+return <user.value_syntax>: "return {value_syntax}"

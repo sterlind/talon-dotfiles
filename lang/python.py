@@ -15,12 +15,12 @@ ctx.lists["self.known_types"] = {
 
 mod.list("keywords", "grammar keywords")
 ctx.lists["self.keywords"] = [
-    "named",
     "type",
     "arg",
     "funk",
     "and",
-    "dot"
+    "dot",
+    "call"
 ]
 
 @mod.capture(rule="<user.letter_or_number> | <user.text> [{user.keywords}]")
@@ -48,6 +48,17 @@ def compound_name_syntax(m) -> str:
 @mod.capture(rule="<user.compound_name_syntax> ([and] <user.compound_name_syntax>)*")
 def arguments_syntax(m) -> List[str]:
     return m.compound_name_syntax_list
+
+@mod.capture(rule="call <user.compound_name_syntax> [with <user.arguments_syntax>]")
+def call_syntax(m) -> str:
+    try:
+        return f"{m.compound_name_syntax}({m.arguments_syntax})"
+    except AttributeError:
+        return f"{m.compound_name_syntax}()"
+
+@mod.capture(rule="<user.compound_name_syntax> | <user.call_syntax>")
+def value_syntax(m) -> str:
+    return str(m)
 
 @mod.action_class
 class UserActions:

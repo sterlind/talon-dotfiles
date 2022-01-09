@@ -14,7 +14,7 @@ action(app.window_open): user.vscode("workbench.action.newWindow")
 
 # Sidebar
 bar (show | hide):               user.vscode("workbench.action.toggleSidebarVisibility")
-bar explore:                    user.vscode("workbench.view.explorer")
+bar explore:                     user.vscode("workbench.view.explorer")
 bar extensions:                  user.vscode("workbench.view.extensions")
 bar outline:                     user.vscode("outline.focus")
 bar debug:                       user.vscode("workbench.view.debug")
