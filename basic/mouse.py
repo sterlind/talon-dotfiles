@@ -16,3 +16,6 @@ class Actions:
             actions.mode.enable("user.mouse")
         else:
             actions.mode.disable("user.mouse")
+    def mouse_calibrate():
+        """Start calibration"""
+        eye_mouse.calib_start()
