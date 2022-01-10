@@ -29,6 +29,13 @@ ctx.lists["self.keywords"] = [
     "call"
 ]
 
+mod.list("infix_operators", "Binary infix operators")
+ctx.lists["self.infix_operators"] = {
+    "plus": "+",
+    "minus": "-",
+    "times": "*",
+    "divides": "/"
+}
 
 @mod.capture(rule="{user.complex_type} of {user.primitive_type}")
 def complex_type_syntax(m) -> str:
@@ -38,12 +45,12 @@ def complex_type_syntax(m) -> str:
 def type_syntax(m) -> str:
     return str(m)
 
-@mod.capture(rule="<user.letter_or_number> | <user.text> [{user.keywords}]")
+@mod.capture(rule="<user.letter_or_number> | <user.word>+ [{user.keywords}]")
 def name_syntax(m) -> str:
     try:
         return m.letter_or_number
     except AttributeError:
-        return actions.user.format_text(str(m.text), "SNAKE_CASE")
+        return actions.user.format_text(" ".join(m.word_list), "SNAKE_CASE")
 
 @mod.capture(rule=" <user.name_syntax> [type <user.type_syntax>]")
 def parameter_syntax(m) -> str:
