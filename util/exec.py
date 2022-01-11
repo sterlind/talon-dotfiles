@@ -7,6 +7,11 @@ from talon_init import TALON_USER
 mod = Module()
 
 
+def execute_user_script_inner(file: str, arg: str, handler):
+    print(arg)
+    script_path = os.path.join(TALON_USER, "mine", "scripts", file)
+    handler(f"powershell -WindowStyle hidden {script_path} {arg}")
+
 @mod.action_class
 class Actions:
     def join_paths(left: str, right: str):
@@ -25,6 +30,8 @@ class Actions:
     
     def execute_user_script(file: str, arg: str = None):
         "executes a user script"
-        print(arg)
-        script_path = os.path.join(TALON_USER, "mine", "scripts", file)
-        actions.user.system_command(f"powershell -WindowStyle hidden {script_path} {arg}")
+        execute_user_script_inner(file, arg, actions.user.system_command)
+
+    def execute_user_script_nb(file: str, arg: str = None):
+        "executes a user script unblocking"
+        execute_user_script_inner(file, arg, actions.user.system_command_nb)
