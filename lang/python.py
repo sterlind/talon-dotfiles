@@ -15,7 +15,7 @@ ctx.lists["self.primitive_type"] = {
 
 mod.list("complex_type", "known complex types")
 ctx.lists["self.complex_type"] = {
-    "list": "list",
+    "List": "list",
     "set": "set"
 }
 
@@ -26,7 +26,16 @@ ctx.lists["self.keywords"] = [
     "funk",
     "and",
     "dot",
-    "call"
+    "call",
+    "takes",
+    "also",
+    "returns",
+    "from",
+    "map",
+    "array",
+    "try",
+    "set",
+    "class"
 ]
 
 mod.list("infix_operators", "Binary infix operators")
@@ -45,12 +54,19 @@ def complex_type_syntax(m) -> str:
 def type_syntax(m) -> str:
     return str(m)
 
-@mod.capture(rule="<user.letter_or_number> | <user.word>+ [{user.keywords}]")
+@mod.capture(rule="<user.letter_or_number> | (<user.word>+ [{user.keywords}])")
 def name_syntax(m) -> str:
     try:
         return m.letter_or_number
     except AttributeError:
         return actions.user.format_text(" ".join(m.word_list), "SNAKE_CASE")
+
+@mod.capture(rule="(<user.word>+ [{user.keywords}])")
+def class_syntax(m) -> str:
+    try:
+        return m.letter_or_number
+    except AttributeError:
+        return actions.user.format_text(" ".join(m.word_list), "HAMMER_CASE")
 
 @mod.capture(rule=" <user.name_syntax> [type <user.type_syntax>]")
 def parameter_syntax(m) -> str:
@@ -84,20 +100,17 @@ def value_syntax(m) -> str:
 
 @mod.action_class
 class UserActions:
+    def code_import(module: str, named_imports: List[str]):
+        "Inserts a from-import statement"
+        names = ", ".join(named_imports)
+        actions.user.insert_snippet(f"from {module} import {names}")
+        
     def code_parameter(parameters: List[str], preamble: str = None):
         "Inserts one or more parameters into a function declaration"
         parameters = ", ".join(parameters)
         preamble = preamble or ""
         actions.user.insert_snippet(preamble + parameters)
 
-    # def code_argument(name: str, type: str = None):
-    #     "inserts an argument"
-    #     name = actions.user.format_text(name, "SNAKE_CASE")
-    #     if type:
-    #         actions.insert(f"{name}: {type}")
-    #     else:
-    #         actions.insert(f"{name}")
-        
     def code_function(name: str, args: List[str] = None):
         "inserts a function"
         # name = actions.user.format_text(name, "SNAKE_CASE")

@@ -25,3 +25,6 @@ ref last:                        user.vscode("references-view.prev")
 ref next:                        user.vscode("references-view.next")
 
 next:                            user.vscode("jumpToNextSnippetPlaceholder")
+
+nope: key(ctrl-z)
+redo: key(ctrl-y)

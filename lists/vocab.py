@@ -9,5 +9,6 @@ ctx.lists["self.vocabulary"] = []
 mod.list("abbreviation", desc="Maps full words to their abbreviations")
 ctx.lists["self.abbreviation"] = {
     "context": "ctx",
-    "module": "mod"
+    "module": "mod",
+    "regex": "re"
 }
