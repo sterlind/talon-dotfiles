@@ -12,7 +12,7 @@ tag: user.python
 
 funk <user.name_syntax>:
     user.insert_snippet("def {name_syntax}($1)$2:")
-takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
+[which] takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
     user.code_parameter(parameter_syntax_list)
 also takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
     user.code_parameter(parameter_syntax_list, ", ")
