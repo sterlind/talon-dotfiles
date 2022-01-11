@@ -84,6 +84,12 @@ def value_syntax(m) -> str:
 
 @mod.action_class
 class UserActions:
+    def code_parameter(parameters: List[str], preamble: str = None):
+        "Inserts one or more parameters into a function declaration"
+        parameters = ", ".join(parameters)
+        preamble = preamble or ""
+        actions.user.insert_snippet(preamble + parameters)
+
     # def code_argument(name: str, type: str = None):
     #     "inserts an argument"
     #     name = actions.user.format_text(name, "SNAKE_CASE")
