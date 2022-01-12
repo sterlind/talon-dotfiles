@@ -43,8 +43,25 @@ ctx.lists["self.infix_operators"] = {
     "plus": "+",
     "minus": "-",
     "times": "*",
-    "divides": "/"
+    "divides": "/",
+    "less": "<",
+    "more": ">",
+    "less equal": "<=",
+    "more equal": ">=",
+    "equal": "==",
+    "not equal": "!=",
+    "or": "or",
+    "and": "and"
 }
+
+mod.list("unary_operators", "Unary prefix operators")
+ctx.lists["self.unary_operators"] = {
+    "not": "not"
+}
+
+@mod.capture(rule="{user.infix_operators} | {user.unary_operators}")
+def operator_syntax(m) -> str:
+    return str(m)
 
 @mod.capture(rule="{user.complex_type} of {user.primitive_type}")
 def complex_type_syntax(m) -> str:
@@ -94,7 +111,7 @@ def call_syntax(m) -> str:
     except AttributeError:
         return f"{m.compound_name_syntax}()"
 
-@mod.capture(rule="<user.compound_name_syntax> | <user.number>")
+@mod.capture(rule="<user.compound_name_syntax> | <user.number> | <user.formatted_string>")
 def value_syntax(m) -> str:
     return str(m)
 

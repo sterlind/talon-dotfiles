@@ -1,5 +1,5 @@
 from typing import List
-from talon import Module, Context
+from talon import Module, Context, actions
 
 mod = Module()
 ctx = Context()
@@ -30,6 +30,11 @@ ctx.lists["self.formatter_code"] = {
 def formatters_code(m) -> str:
     "Returns comma-separated formatter list."
     return ",".join(m.formatter_code_list)
+
+@mod.capture(rule="(<user.formatters_code> <user.words> over)")
+def formatted_string(m) -> str:
+    "Returns a formatted string"
+    return actions.user.format_text(m.words, m.formatters_code)
 
 @mod.action_class
 class Actions:

@@ -17,7 +17,7 @@ returns type <user.type_syntax>:
     user.vscode("jumpToNextSnippetPlaceholder")
     insert(" -> {type_syntax}")
 call <user.compound_name_syntax>: user.insert_snippet("{compound_name_syntax}($0)")
-return <user.value_syntax>: "return {value_syntax}"
+return: user.insert_snippet("return $1")
 format: user.insert_snippet("f\"$0\"")
 if: user.insert_snippet("if $1:\n\t$0")
 import <user.compound_name_syntax>: user.insert_snippet("import {compound_name_syntax}\n$0")
@@ -27,6 +27,13 @@ from <user.compound_name_syntax> import <user.name_syntax> ([and] <user.name_syn
 map: user.insert_snippet("{{\n\t$1\n\}}")
 array: user.insert_snippet("[\n\t$1\n]")
 set <user.compound_name_syntax> to: user.insert_snippet("{compound_name_syntax} = $1")
+var <user.compound_name_syntax> is: user.insert_snippet("{compound_name_syntax} = $1")
+var <user.compound_name_syntax>: insert(compound_name_syntax)
+value <user.value_syntax>: insert(value_syntax)
 try: user.insert_snippet("try:\n\t$1\nexcept $2:\n\t$3")
 op <user.value_syntax> {user.infix_operators} <user.value_syntax>:
     user.insert_snippet("{value_syntax_1} {infix_operators} {value_syntax_2}$0")
+op <user.operator_syntax>: insert(operator_syntax)
+op <user.operator_syntax> <user.value_syntax>: user.insert_snippet(" {operator_syntax} {value_syntax}$0")
+op <user.value_syntax> <user.operator_syntax>: user.insert_snippet("{value_syntax} {operator_syntax} $1")
+index: user.insert_snippet("[$1]$0")
