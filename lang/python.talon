@@ -18,8 +18,12 @@ returns type <user.type_syntax>:
     insert(" -> {type_syntax}")
 call <user.compound_name_syntax>: user.insert_snippet("{compound_name_syntax}($0)")
 return: user.insert_snippet("return $1")
-format: user.insert_snippet("f\"$0\"")
+format string: user.insert_snippet("f\"$0\"")
 if: user.insert_snippet("if $1:\n\t$0")
+for <user.name_syntax> in:
+    user.insert_snippet("for {name_syntax} in $1:\n\t$2")
+comp: user.insert_snippet("[$1 for $2 in $3]")
+comp for <user.name_syntax> in: user.insert_snippet("[$2 for {name_syntax} in $1]")
 import <user.compound_name_syntax>: user.insert_snippet("import {compound_name_syntax}\n$0")
 class <user.class_syntax>: user.insert_snippet("class {class_syntax}:\n\t$0")
 from <user.compound_name_syntax> import <user.name_syntax> ([and] <user.name_syntax>)*:
