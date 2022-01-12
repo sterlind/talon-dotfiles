@@ -10,7 +10,9 @@ tag: user.python
 mod.list("primitive_type", "known primitive types")
 ctx.lists["self.primitive_type"] = {
     "string": "str",
-    "int": "int"
+    "int": "int",
+    "bool": "bool",
+    "boolean": "bool",
 }
 
 mod.list("complex_type", "known complex types")
@@ -59,6 +61,14 @@ ctx.lists["self.unary_operators"] = {
     "not": "not"
 }
 
+mod.list("constants", "Simple language constants")
+ctx.lists["self.constants"] = {
+    "true": "True",
+    "false": "False",
+    "none": "None",
+    "empty string": "\"\""
+}
+
 @mod.capture(rule="{user.infix_operators} | {user.unary_operators}")
 def operator_syntax(m) -> str:
     return str(m)
@@ -78,6 +88,10 @@ def name_syntax(m) -> str:
     except AttributeError:
         return actions.user.format_text(" ".join(m.word_list), "SNAKE_CASE")
 
+@mod.capture(rule="<user.name_syntax> [(dot <user.name_syntax>)+]")
+def compound_name_syntax(m) -> str:
+    return ".".join(m.name_syntax_list)
+
 @mod.capture(rule="(<user.word>+ [{user.keywords}])")
 def class_syntax(m) -> str:
     try:
@@ -96,9 +110,7 @@ def parameter_syntax(m) -> str:
 def parameters_syntax(m) -> List[str]:
     return m.parameter_syntax_list
 
-@mod.capture(rule="<user.name_syntax> ([dot] <user.name_syntax>)*")
-def compound_name_syntax(m) -> str:
-    return ".".join(m.name_syntax_list)
+
 
 @mod.capture(rule="<user.compound_name_syntax> ([and] <user.compound_name_syntax>)*")
 def arguments_syntax(m) -> List[str]:
@@ -111,7 +123,7 @@ def call_syntax(m) -> str:
     except AttributeError:
         return f"{m.compound_name_syntax}()"
 
-@mod.capture(rule="<user.compound_name_syntax> | <user.number> | <user.formatted_string>")
+@mod.capture(rule="<user.formatted_string> | <user.number> | <user.compound_name_syntax> | {user.constants}")
 def value_syntax(m) -> str:
     return str(m)
 
@@ -124,6 +136,7 @@ class UserActions:
         
     def code_parameter(parameters: List[str], preamble: str = None):
         "Inserts one or more parameters into a function declaration"
+        # print(repr(parameters))
         parameters = ", ".join(parameters)
         preamble = preamble or ""
         actions.user.insert_snippet(preamble + parameters)

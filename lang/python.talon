@@ -8,10 +8,10 @@ funk <user.name_syntax>:
     user.code_parameter(parameter_syntax_list)
 also takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
     user.code_parameter(parameter_syntax_list, ", ")
-pass <user.compound_name_syntax> (and <user.compound_name_syntax>)*:
-    user.code_parameter(compound_name_syntax_list)
-also (pass|import) <user.compound_name_syntax> (and <user.compound_name_syntax>)*:
-    user.code_parameter(compound_name_syntax_list, ", ")
+pass <user.value_syntax> (and <user.value_syntax>)*:
+    user.code_parameter(value_syntax_list)
+also (pass|import) <user.value_syntax> (and <user.value_syntax>)*:
+    user.code_parameter(value_syntax_list, ", ")
 (document|dock) <phrase> [over]:
     user.insert_snippet("\"\"\"{phrase}\"\"\"")
 
@@ -32,6 +32,8 @@ from <user.compound_name_syntax> import <user.name_syntax> ([and] <user.name_syn
     user.code_import(compound_name_syntax, name_syntax_list)
 map: user.insert_snippet("{{\n\t$1\n\}}")
 array: user.insert_snippet("[\n\t$1\n]")
+lambda <user.name_syntax> [does]:
+    user.insert_snippet("lambda {name_syntax}: $1")
 set <user.compound_name_syntax> to: user.insert_snippet("{compound_name_syntax} = $1")
 var <user.compound_name_syntax> is: user.insert_snippet("{compound_name_syntax} = $1")
 var <user.compound_name_syntax>: insert(compound_name_syntax)

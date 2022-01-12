@@ -9,7 +9,7 @@ ctx = Context()
 def abbreviated_word(m) -> str:
     return m.abbreviation
     
-@mod.capture(rule="spell (<user.letter>)+ over")
+@mod.capture(rule="spell (<user.letter>)+ [over]")
 def spelled_word(m) -> str:
     return "".join(m.letter_list)
 

@@ -12,7 +12,8 @@ formatters_list = {
     "DOUBLE_QUOTED_STRING": lambda text: f"\"{text}\"",
     "SNAKE_CASE": lambda text: format_words(text, split, "_"),
     "HAMMER_CASE": lambda text: format_words(text, split, "", capitalize, capitalize),
-    "CAMEL_CASE": lambda text: format_words(text, split, "", lower, capitalize)
+    "CAMEL_CASE": lambda text: format_words(text, split, "", lower, capitalize),
+    "KEBAB_CASE": lambda text: format_words(text, split, "-")
 }
 
 mod.list("formatter_code", desc="Code formatters")
@@ -23,7 +24,8 @@ ctx.lists["self.formatter_code"] = {
     "string": "DOUBLE_QUOTED_STRING",
     "snake": "SNAKE_CASE",
     "hammer": "HAMMER_CASE",
-    "camel": "CAMEL_CASE"
+    "camel": "CAMEL_CASE",
+    "kabab": "KEBAB_CASE"
 }
 
 @mod.capture(rule="{self.formatter_code}+")
@@ -31,7 +33,7 @@ def formatters_code(m) -> str:
     "Returns comma-separated formatter list."
     return ",".join(m.formatter_code_list)
 
-@mod.capture(rule="(<user.formatters_code> <user.words> over)")
+@mod.capture(rule="(<user.formatters_code> <user.words> [over])")
 def formatted_string(m) -> str:
     "Returns a formatted string"
     return actions.user.format_text(m.words, m.formatters_code)
