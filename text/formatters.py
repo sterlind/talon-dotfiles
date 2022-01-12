@@ -10,7 +10,7 @@ formatters_list = {
     "PROPER_CASE": lambda text: format_words(text, split, "", capitalize, lower),
     "SENTENCE_CASE": lambda text: format_words(text, split, " ", capitalize, lower),
     "DOUBLE_QUOTED_STRING": lambda text: f"\"{text}\"",
-    "SNAKE_CASE": lambda text: format_words(text, split, "_", lower, lower),
+    "SNAKE_CASE": lambda text: format_words(text, split, "_"),
     "HAMMER_CASE": lambda text: format_words(text, split, "", capitalize, capitalize),
     "CAMEL_CASE": lambda text: format_words(text, split, "", lower, capitalize)
 }

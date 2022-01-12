@@ -10,15 +10,17 @@ also takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
     user.code_parameter(parameter_syntax_list, ", ")
 pass <user.compound_name_syntax> (and <user.compound_name_syntax>)*:
     user.code_parameter(compound_name_syntax_list)
-also pass <user.compound_name_syntax> (and <user.compound_name_syntax>)*:
+also (pass|import) <user.compound_name_syntax> (and <user.compound_name_syntax>)*:
     user.code_parameter(compound_name_syntax_list, ", ")
+(document|dock) <phrase> [over]:
+    user.insert_snippet("\"\"\"{phrase}\"\"\"")
 
 returns type <user.type_syntax>:
     user.vscode("jumpToNextSnippetPlaceholder")
     insert(" -> {type_syntax}")
 call <user.compound_name_syntax>: user.insert_snippet("{compound_name_syntax}($0)")
 return: user.insert_snippet("return $1")
-format string: user.insert_snippet("f\"$0\"")
+format: user.insert_snippet("f\"$0\"")
 if: user.insert_snippet("if $1:\n\t$0")
 for <user.name_syntax> in:
     user.insert_snippet("for {name_syntax} in $1:\n\t$2")

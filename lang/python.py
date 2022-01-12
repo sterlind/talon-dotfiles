@@ -133,4 +133,3 @@ class UserActions:
         # name = actions.user.format_text(name, "SNAKE_CASE")
         args = ", ".join(args) if args else ""
         actions.user.insert_snippet(f"def {name}({args}):\n\t$1")
-        
