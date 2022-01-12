@@ -94,7 +94,7 @@ def call_syntax(m) -> str:
     except AttributeError:
         return f"{m.compound_name_syntax}()"
 
-@mod.capture(rule="<user.compound_name_syntax> | <user.call_syntax>")
+@mod.capture(rule="<user.compound_name_syntax> | <user.number>")
 def value_syntax(m) -> str:
     return str(m)
 
