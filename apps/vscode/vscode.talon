@@ -11,6 +11,8 @@ action(app.window_close): user.vscode("workbench.action.closeWindow")
 action(app.window_open): user.vscode("workbench.action.newWindow")
 
 ^git commit$: user.vscode("git.commitStaged")
+^git status$: user.vscode("workbench.scm.focus")
+^git pull$: user.vscode("git.pullRebase")
 
 # Sidebar
 bar (show | hide):               user.vscode("workbench.action.toggleSidebarVisibility")
