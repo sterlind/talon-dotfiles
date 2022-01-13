@@ -4,6 +4,8 @@ tag: user.python
 
 funk <user.name_syntax>:
     user.insert_snippet("def {name_syntax}($1)$2:")
+constructor:
+    user.insert_snippet("def __init__($1)$2:")
 [which] takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
     user.code_parameter(parameter_syntax_list)
 also takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
@@ -19,9 +21,11 @@ returns type <user.type_syntax>:
     user.vscode("jumpToNextSnippetPlaceholder")
     insert(" -> {type_syntax}")
 call <user.compound_name_syntax>: user.insert_snippet("{compound_name_syntax}($0)")
+return <user.value_syntax>: user.insert_snippet("return {value_syntax}$0")
 return: user.insert_snippet("return $1")
 format: user.insert_snippet("f\"$0\"")
 if: user.insert_snippet("if $1:\n\t$0")
+if <user.value_syntax>: user.insert_snippet("if {value_syntax}:\n\t$0")
 for <user.name_syntax> in:
     user.insert_snippet("for {name_syntax} in $1:\n\t$2")
 comp: user.insert_snippet("[$1 for $2 in $3]")

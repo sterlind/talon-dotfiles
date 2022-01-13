@@ -1,9 +1,20 @@
-from talon import Context, actions
+from talon import Context, actions, clip
 
 ctx = Context()
 ctx.matches = r"""
 os: windows
 """
+
+@ctx.action_class("edit")
+class ClipboardActions:
+    def selected_text() -> str:
+        with clip.capture() as s:
+            actions.edit.copy()
+            try:
+                return s.get()
+            except clip.NoChange:
+                return ""
+            
 
 @ctx.action_class("edit")
 class EditActions:
@@ -46,6 +57,8 @@ class EditActions:
         actions.key("ctrl-home")
 
     # Selection actions
+    def select_none():
+        actions.key("esc")
     def select_word():
         actions.edit.right()
         actions.edit.word_left()
