@@ -19,13 +19,14 @@ mod.mode("dictation")
 #     "space": " ",
 # }
 
+
 @mod.action_class
 class Actions:
     def dictation_insert(text: str) -> str:
         """inserts dictated text"""
-        context_before = actions.self.dictation_look_left()
-        if not need_space_between(context_before, text):
-            context_before = " " + context_before        
+        # context_before = actions.self.dictation_look_left()
+        # if need_space_between(context_before, text):
+        #     text = " " + text
         actions.insert(text)
 
     def dictation_look_left() -> str:
@@ -66,10 +67,10 @@ no_space_before = re.compile(r"""
     )""", re.VERBOSE)
 
 def omit_space_before(text: str) -> bool:
-    return text or no_space_before.search(text)
+    return not text or no_space_before.search(text)
 
 def omit_space_after(text: str) -> bool:
-    return text or no_space_after.search(text)
+    return not text or no_space_after.search(text)
 
 def need_space_between(before: str, after: str) -> bool:
     return not (omit_space_after(before) or omit_space_before(after))

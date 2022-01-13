@@ -14,7 +14,6 @@ class ClipboardActions:
             return s.get()
         except clip.NoChange:
             return ""
-            
 
 @ctx.action_class("edit")
 class EditActions:
