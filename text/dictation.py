@@ -1,9 +1,23 @@
 from talon import Module, Context, actions
 import re
 
-
 mod = Module()
 mod.mode("dictation")
+
+# mod.list("punctuation", "Punctuation marks in dictation mode")
+# ctx.lists["self.punctuation"] = {
+#     "dot": ".",
+#     "period": ".",
+#     "bang": "!",
+#     "exclamation": "!",
+#     "question mark": "?",
+#     "question": "?",
+#     "colon": ":",
+#     "left paren": "(",
+#     "right paren": ")",
+#     "ellipses": "...",
+#     "space": " ",
+# }
 
 @mod.action_class
 class Actions:
@@ -24,6 +38,17 @@ class Actions:
         if text:
             actions.edit.right()
         return text
+
+ctx = Context()
+ctx.matches = r"""
+mode: dictation
+"""
+
+@ctx.action_class("main")
+class DictationActions:
+    def auto_insert(text: str):
+        """formats text"""
+        actions.user.dictation_insert(text)
 
 no_space_after = re.compile(r"""
     (?:

@@ -10,10 +10,10 @@ class ClipboardActions:
     def selected_text() -> str:
         with clip.capture() as s:
             actions.edit.copy()
-            try:
-                return s.get()
-            except clip.NoChange:
-                return ""
+        try:
+            return s.get()
+        except clip.NoChange:
+            return ""
             
 
 @ctx.action_class("edit")

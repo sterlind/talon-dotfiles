@@ -39,8 +39,11 @@ def text(m) -> str:
     "text comprising multiple words"
     return " ".join(capture_to_words(m))
 
+@mod.capture(rule="(<user.unmodified_word> | <user.number> | <phrase>)+")
+def prose(m) -> str:
+    """captures generic prose"""
+    return " ".join(capture_to_words(m))
 
-    
 def capture_to_words(m):
     def parse(w):
         if isinstance(w, grammar.vm.Phrase):

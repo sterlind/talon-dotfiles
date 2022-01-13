@@ -85,6 +85,26 @@ ctx.lists["self.key_modifier"] = {
     "super":        "super",
 }
 
+# Symbols you want available BOTH in dictation and command mode.
+mod.list("key_punctuation", desc="Symbols for inserting punctuation into text")
+ctx.lists["self.key_punctuation"] = {
+    "comma":            ",",
+    "period":           ".",
+    "dot":              ".",
+    "semicolon":        ";",
+    "colon":            ":",
+    "forward slash":    "/",
+    "question mark":    "?",
+    "exclamation mark": "!",
+    "dollar sign":      "$",
+    "asterisk":         "*",
+    "hash sign":        "#",
+    "number sign":      "#",
+    "percent sign":     "%",
+    "at sign":          "@",
+    "ampersand":        "&"
+}
+
 # Symbols available in command mode, but NOT during dictation.
 mod.list("key_symbol", desc="All symbols from the keyboard")
 ctx.lists["self.key_symbol"] = {

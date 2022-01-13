@@ -3,9 +3,11 @@ not mode: sleep
 # Major modes
 ^mouse$: user.mouse_toggle()
 ^mode dictate$:
+    user.code_clear_language_mode()
     mode.disable("command")
     mode.enable("dictation")
 ^mode command$:
+    user.code_clear_language_mode()
     mode.disable("dictation")
     mode.enable("command")
 
