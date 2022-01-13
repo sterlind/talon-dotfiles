@@ -23,10 +23,34 @@ bar debug:                       user.vscode("workbench.view.debug")
 bar search:                      user.vscode("workbench.view.search")
 bar source:                      user.vscode("workbench.view.scm")
 bar file:                        user.vscode("workbench.files.action.showActiveFileInExplorer")
+
 ref last:                        user.vscode("references-view.prev")
 ref next:                        user.vscode("references-view.next")
+
+hunt all: user.vscode("workbench.action.findInFiles")
+result next: key(f4)
+result previous: key(shift-f4)
+results collapse: user.vscode("workbench.files.action.collapseExplorerFolders")
 
 next:                            user.vscode("jumpToNextSnippetPlaceholder")
 
 nope: key(ctrl-z)
 redo: key(ctrl-y)
+
+# File commands
+file hunt [<user.text>]:
+    user.vscode("workbench.action.quickOpen")
+    sleep(50ms)
+    insert(text or "")
+file create sibling: user.vscode("explorer.newFile")
+file rename:
+    user.vscode("fileutils.renameFile")
+    sleep(150ms)
+file move:
+	  user.vscode("fileutils.moveFile")
+	  sleep(150ms)
+folder new: user.vscode("explorer.newFolder")
+file new: user.vscode("explorer.newFile")
+file open folder: user.vscode("revealFileInOS")
+file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
+save: user.vscode("workbench.action.files.saveWithoutFormatting")

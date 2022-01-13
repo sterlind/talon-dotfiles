@@ -110,8 +110,6 @@ def parameter_syntax(m) -> str:
 def parameters_syntax(m) -> List[str]:
     return m.parameter_syntax_list
 
-
-
 @mod.capture(rule="<user.compound_name_syntax> ([and] <user.compound_name_syntax>)*")
 def arguments_syntax(m) -> List[str]:
     return m.compound_name_syntax_list
