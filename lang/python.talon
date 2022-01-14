@@ -38,6 +38,7 @@ from <user.compound_name_syntax> import <user.name_syntax> ([and] <user.name_syn
     user.code_import(compound_name_syntax, name_syntax_list)
 map: user.insert_snippet("{{\n\t$1\n\}}")
 array: user.insert_snippet("[\n\t$1\n]")
+ternary: user.insert_snippet("$1 if $2 else $3")
 lambda <user.name_syntax> [does]:
     user.insert_snippet("lambda {name_syntax}: $1")
 set <user.compound_name_syntax> to: user.insert_snippet("{compound_name_syntax} = $1")

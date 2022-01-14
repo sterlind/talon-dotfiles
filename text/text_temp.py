@@ -25,6 +25,7 @@ def unmodified_word(m) -> str:
     words = capture_to_words(m)
     return words[0]
 
+# @mod.capture(rule = "<user.capitalized_word> | <user.unmodified_word> | {user.key_symbol}")
 @mod.capture(rule = "<user.capitalized_word> | <user.unmodified_word>")
 def word(m) -> str:
     "Single word"

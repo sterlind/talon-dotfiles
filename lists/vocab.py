@@ -4,7 +4,9 @@ mod = Module()
 ctx = Context()
 
 mod.list("vocabulary", desc="Vocabulary")
-ctx.lists["self.vocabulary"] = []
+ctx.lists["self.vocabulary"] = [
+    "itertools"
+]
 
 mod.list("abbreviation", desc="Maps full words to their abbreviations")
 ctx.lists["self.abbreviation"] = {

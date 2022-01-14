@@ -8,7 +8,8 @@ navigation_types = {
     "CHARACTER": ("left", "right", "up", "down"),
     "WORD": ("ctrl-left", "ctrl-right", "ctrl-up", "ctrl-down"),
     "LINE": ("home", "end", ["up", "home"], ["down", "home"]),
-    "PAGE": (None, None, "pageup", "pagedown")
+    "PAGE": (None, None, "pageup", "pagedown"),
+    "WAY": (["home", "home"], ["end", "end"], "ctrl-home", "ctrl-end")
 }
 
 mod.list("navigation_type")
@@ -16,6 +17,7 @@ ctx.lists["self.navigation_type"] = {
     "char": "CHARACTER",
     "word": "WORD",
     "line": "LINE",
+    "way": "WAY",
     "page": "PAGE"
 }
 
@@ -26,20 +28,6 @@ ctx.lists["self.cardinal_direction"] = {
     "up": "2",
     "down": "3"
 }
-
-edit_actions = {
-    "go": lambda direction: actions.user.go_direction(direction),
-    "take": lambda direction: actions.user.select_direction(direction), 
-    "copy": lambda direction: actions.user.copy_direction(direction),
-    "chuck": lambda direction: actions.user.delete_direction(direction)
-}
-mod.list("edit_action")
-ctx.lists["self.edit_action"] = [
-    "go",
-    "take", 
-    "copy",
-    "chuck"
-]
 
 @mod.capture(rule = "[{user.navigation_type}] {user.cardinal_direction}")
 def navigation_direction(m) -> List[str]:
@@ -60,6 +48,9 @@ class EditActions:
     def copy():
         """copies selected text"""
         actions.key("ctrl-c")
+    def delete():
+        """deletes selected text"""
+        actions.key("del")
 
     def go_direction(direction: List[str]):
         """goes in a particular direction"""
@@ -69,5 +60,9 @@ class EditActions:
         apply_key_sequence(prepend_modifier("shift", direction))
     def copy_direction(direction: List[str]):
         """selects text in a particular direction"""
-        apply_key_sequence(prepend_modifier("shift", direction))
+        actions.self.select_direction(direction)
         actions.self.copy()
+    def delete_direction(direction: List[str]):
+        """deletes text in a particular direction"""
+        actions.self.select_direction(direction)
+        actions.self.delete()
