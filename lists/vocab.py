@@ -11,5 +11,8 @@ ctx.lists["self.abbreviation"] = {
     "context": "ctx",
     "module": "mod",
     "regex": "re",
-    "control": "ctrl"
+    "control": "ctrl",
+    "navigation": "nav",
+    "integer": "int",
+    "character": "char"
 }

@@ -23,11 +23,13 @@ returns type <user.type_syntax>:
 call <user.compound_name_syntax>: user.insert_snippet("{compound_name_syntax}($0)")
 return <user.value_syntax>: user.insert_snippet("return {value_syntax}$0")
 return: user.insert_snippet("return $1")
-format: user.insert_snippet("f\"$0\"")
+# format: user.insert_snippet("f\"$0\"")
 if: user.insert_snippet("if $1:\n\t$0")
 if <user.value_syntax>: user.insert_snippet("if {value_syntax}:\n\t$0")
 for <user.name_syntax> in:
     user.insert_snippet("for {name_syntax} in $1:\n\t$2")
+for <user.name_syntax> in <user.name_syntax>:
+    user.insert_snippet("for {name_syntax_1} in {name_syntax_2}:\n\t$1")
 comp: user.insert_snippet("[$1 for $2 in $3]")
 comp for <user.name_syntax> in: user.insert_snippet("[$2 for {name_syntax} in $1]")
 import <user.compound_name_syntax>: user.insert_snippet("import {compound_name_syntax}\n$0")
@@ -45,7 +47,7 @@ value <user.value_syntax>: insert(value_syntax)
 try: user.insert_snippet("try:\n\t$1\nexcept $2:\n\t$3")
 op <user.value_syntax> {user.infix_operators} <user.value_syntax>:
     user.insert_snippet("{value_syntax_1} {infix_operators} {value_syntax_2}$0")
-op <user.operator_syntax>: insert(operator_syntax)
+op <user.operator_syntax>: insert(" {operator_syntax} ")
 op <user.operator_syntax> <user.value_syntax>: user.insert_snippet(" {operator_syntax} {value_syntax}$0")
 op <user.value_syntax> <user.operator_syntax>: user.insert_snippet("{value_syntax} {operator_syntax} $1")
 index: user.insert_snippet("[$1]$0")

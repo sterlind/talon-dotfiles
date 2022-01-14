@@ -19,14 +19,13 @@ mod.mode("dictation")
 #     "space": " ",
 # }
 
-
 @mod.action_class
 class Actions:
     def dictation_insert(text: str) -> str:
         """inserts dictated text"""
-        # context_before = actions.self.dictation_look_left()
-        # if need_space_between(context_before, text):
-        #     text = " " + text
+        context_before = actions.self.dictation_look_left()
+        if need_space_between(context_before, text):
+            text = " " + text
         actions.insert(text)
 
     def dictation_look_left() -> str:

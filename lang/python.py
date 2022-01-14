@@ -17,7 +17,7 @@ ctx.lists["self.primitive_type"] = {
 
 mod.list("complex_type", "known complex types")
 ctx.lists["self.complex_type"] = {
-    "List": "list",
+    "list": "List",
     "set": "set"
 }
 
@@ -53,7 +53,8 @@ ctx.lists["self.infix_operators"] = {
     "equal": "==",
     "not equal": "!=",
     "or": "or",
-    "and": "and"
+    "and": "and",
+    "assign": "="
 }
 
 mod.list("unary_operators", "Unary prefix operators")

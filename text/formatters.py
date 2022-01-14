@@ -13,7 +13,8 @@ formatters_list = {
     "SNAKE_CASE": lambda text: format_words(text, split, "_"),
     "HAMMER_CASE": lambda text: format_words(text, split, "", capitalize, capitalize),
     "CAMEL_CASE": lambda text: format_words(text, split, "", lower, capitalize),
-    "KEBAB_CASE": lambda text: format_words(text, split, "-")
+    "KEBAB_CASE": lambda text: format_words(text, split, "-"),
+    "SMASH_CASE": lambda text: format_words(text, split, "")
 }
 
 mod.list("formatter_code", desc="Code formatters")
@@ -25,7 +26,8 @@ ctx.lists["self.formatter_code"] = {
     "snake": "SNAKE_CASE",
     "hammer": "HAMMER_CASE",
     "camel": "CAMEL_CASE",
-    "kabab": "KEBAB_CASE"
+    "kabab": "KEBAB_CASE",
+    "smash": "SMASH_CASE"
 }
 
 @mod.capture(rule="{self.formatter_code}+")
