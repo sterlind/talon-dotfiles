@@ -14,8 +14,10 @@ pass <user.value_syntax> (and <user.value_syntax>)*:
     user.code_parameter(value_syntax_list)
 also (pass|import) <user.value_syntax> (and <user.value_syntax>)*:
     user.code_parameter(value_syntax_list, ", ")
-(document|dock) <phrase> [over]:
+(document) <phrase> [over]:
     user.insert_snippet("\"\"\"{phrase}\"\"\"")
+explain <user.text>$:
+    user.insert_snippet("# $0")
 
 returns type <user.type_syntax>:
     user.vscode("jumpToNextSnippetPlaceholder")
@@ -30,8 +32,8 @@ for <user.name_syntax> in:
     user.insert_snippet("for {name_syntax} in $1:\n\t$2")
 for <user.name_syntax> in <user.name_syntax>:
     user.insert_snippet("for {name_syntax_1} in {name_syntax_2}:\n\t$1")
-comp: user.insert_snippet("[$1 for $2 in $3]")
-comp for <user.name_syntax> in: user.insert_snippet("[$2 for {name_syntax} in $1]")
+list comp: user.insert_snippet("[$1 for $2 in $3]")
+list comp for <user.name_syntax> in: user.insert_snippet("[$2 for {name_syntax} in $1]")
 import <user.compound_name_syntax>: user.insert_snippet("import {compound_name_syntax}\n$0")
 class <user.class_syntax>: user.insert_snippet("class {class_syntax}:\n\t$0")
 from <user.compound_name_syntax> import <user.name_syntax> ([and] <user.name_syntax>)*:

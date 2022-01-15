@@ -54,3 +54,9 @@ file new: user.vscode("explorer.newFile")
 file open folder: user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
 save: user.vscode("workbench.action.files.saveWithoutFormatting")
+
+# Search commands
+symbol hunt [<user.text>]:
+    user.vscode("workbench.action.gotoSymbol")
+    sleep(50ms)
+    insert(text or "")

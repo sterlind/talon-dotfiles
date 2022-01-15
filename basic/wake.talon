@@ -1,4 +1,4 @@
 mode: all
 -
-^awaken$: speech.enable()
+^abracadabra$: speech.enable()
 ^drowse$: speech.disable()
