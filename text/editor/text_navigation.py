@@ -41,17 +41,10 @@ def prepend_modifier(modifier, keys):
 
 def apply_key_sequence(keys):
     for key in keys:
-        actions.key(key)
-    
-@mod.action_class
-class EditActions:
-    def copy():
-        """copies selected text"""
-        actions.key("ctrl-c")
-    def delete():
-        """deletes selected text"""
-        actions.key("del")
+        actions.key(key)        
 
+@mod.action_class
+class TextNavigationActions:
     def go_direction(direction: List[str]):
         """goes in a particular direction"""
         apply_key_sequence(direction)

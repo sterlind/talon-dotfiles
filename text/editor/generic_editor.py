@@ -1,19 +1,7 @@
-from talon import Context, actions, clip
+from talon import Module, Context, actions, clip
 
+mod = Module()
 ctx = Context()
-ctx.matches = r"""
-os: windows
-"""
-
-@ctx.action_class("edit")
-class ClipboardActions:
-    def selected_text() -> str:
-        with clip.capture() as s:
-            actions.edit.copy()
-        try:
-            return s.get()
-        except clip.NoChange:
-            return ""
 
 @ctx.action_class("edit")
 class EditActions:
@@ -90,3 +78,11 @@ class EditActions:
     def delete_line():
         actions.edit.select_line()
         actions.edit.delete()
+        
+    def selected_text() -> str:
+        with clip.capture() as s:
+            actions.edit.copy()
+        try:
+            return s.get()
+        except clip.NoChange:
+            return ""
