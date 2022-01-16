@@ -15,6 +15,21 @@ action(app.window_open): user.vscode("workbench.action.newWindow")
 ^git status$: user.vscode("workbench.scm.focus")
 ^git pull$: user.vscode("git.pullRebase")
 
+# Split
+split up:                        user.vscode("workbench.action.moveEditorToAboveGroup")
+split down:                      user.vscode("workbench.action.moveEditorToBelowGroup")
+split left:                      user.vscode("workbench.action.moveEditorToLeftGroup")
+split right:                     user.vscode("workbench.action.moveEditorToRightGroup")
+focus up:                        user.vscode("workbench.action.focusAboveGroup")
+focus down:                      user.vscode("workbench.action.focusBelowGroup")
+focus left:                      user.vscode("workbench.action.focusLeftGroup")
+focus right:                     user.vscode("workbench.action.focusRightGroup")
+split flip:                      user.vscode("workbench.action.toggleEditorGroupLayout")
+split clear:                     user.vscode("workbench.action.joinTwoGroups")
+split clear all:                 user.vscode("workbench.action.editorLayoutSingle")
+cross:                           user.vscode("workbench.action.focusNextGroup")
+open cross:                      key(ctrl-enter)
+
 # Sidebar
 bar (show | hide):               user.vscode("workbench.action.toggleSidebarVisibility")
 bar explore:                     user.vscode("workbench.view.explorer")
