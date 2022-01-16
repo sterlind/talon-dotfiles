@@ -37,7 +37,7 @@ ctx.lists["self.keywords"] = [
     "array",
     "try",
     "set",
-    "class"
+    # "class"
 ]
 
 mod.list("infix_operators", "Binary infix operators")

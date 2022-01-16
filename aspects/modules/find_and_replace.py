@@ -9,7 +9,6 @@ mod.tag("find_and_replace", desc="Tag for enabling generic find and replace comm
 class Actions:
     def find(text: str):
         """Finds text in current editor"""
-        actions.key("ctrl-f")
 
     def find_next():
         """Navigates to the next occurrence"""

@@ -54,6 +54,13 @@ class EditActions:
         actions.key("end shift-home")
     def select_all():
         actions.key("ctrl-a")
+    def selected_text() -> str:
+        with clip.capture() as s:
+            actions.edit.copy()
+        try:
+            return s.get()
+        except clip.NoChange:
+            return ""
 
     # Extension actions
     def extend_left():
@@ -73,16 +80,19 @@ class EditActions:
     def extend_line_end():
         actions.key("shift-end")
 
+    # Modification actions
     def delete():
         actions.key("backspace")
     def delete_line():
         actions.edit.select_line()
-        actions.edit.delete()
-        
-    def selected_text() -> str:
-        with clip.capture() as s:
-            actions.edit.copy()
-        try:
-            return s.get()
-        except clip.NoChange:
-            return ""
+        actions.edit.delete()        
+    def indent_less():
+        actions.key("shift-tab")
+    def indent_more():
+        actions.key("tab")
+    
+    # Search actions
+    def find(text: str = None):
+        actions.key("ctrl-f")
+    def find_next():
+        actions.key("f3")

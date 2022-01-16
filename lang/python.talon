@@ -17,7 +17,8 @@ also (pass|import) <user.value_syntax> (and <user.value_syntax>)*:
 (document) <phrase> [over]:
     user.insert_snippet("\"\"\"{phrase}\"\"\"")
 explain <user.text>$:
-    user.insert_snippet("# $0")
+    result = user.format_text(text, "SENTENCE_CASE")
+    insert("# {result}")
 
 returns type <user.type_syntax>:
     user.vscode("jumpToNextSnippetPlaceholder")
