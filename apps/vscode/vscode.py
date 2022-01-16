@@ -31,3 +31,8 @@ class UserActions:
         actions.user.vscode("workbench.action.navigateBack")
     def go_forward():
         actions.user.vscode("workbench.action.navigateForward")
+    
+    def tab_close_all():
+        actions.user.vscode("workbench.action.closeAllEditors")
+    def tab_close_others():
+        actions.user.vscode("workbench.action.closeOtherEditors")
