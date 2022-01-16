@@ -1,5 +1,5 @@
 from talon import Module, Context, actions
-from itertools import tee
+import re
 from typing import List
 
 mod = Module()
@@ -31,40 +31,15 @@ ctx.lists["self.formatter_code"] = {
     "smash": "SMASH_CASE"
 }
 
-# FIXME: Talon is still on Python 3.9, pairwise is 3.10+
-def pairwise(iterable):
-    # pairwise('ABCDEFG') --> AB BC CD DE EF FG
-    a, b = tee(iterable)
-    next(b, None)
-    return zip(a, b)
-
-def space_between(needs_space):
-    return lambda left, right: needs_space(left, right) if left and right else False
-
-def smart_spacing(words: List[str], needs_space, separator: str) -> str:
-    def emit(left, right):
-        if needs_space(left, right):
-            return [separator, right] if right else [separator]
-        return [right] if right else []
-    tokens = [emit(x[0], x[1]) for x in pairwise([None] + words + [None])]
-    return "".join([item for sublist in tokens for item in sublist])
-
 @mod.capture(rule="{self.formatter_code}+")
 def formatters_code(m) -> str:
     "Returns comma-separated formatter list."
     return ",".join(m.formatter_code_list)
 
-@mod.capture(rule = "(<user.word> | {user.key_symbol})+")
-def word_separated_string(m) -> str:
-    "Returns a word separated string"
-    def both_words(left, right) -> bool:
-        return left.isalnum() and right.isalnum()
-    return smart_spacing(list(m), space_between(both_words), " ")    
-    
-@mod.capture(rule="(<user.formatters_code> <user.word_separated_string> [over])")
-def formatted_string(m) -> str:
-    "Returns a formatted string"
-    return actions.user.format_text(m.word_separated_string, m.formatters_code)
+@mod.capture(rule="<user.formatters_code>")
+def formatters(m) -> str:
+    """Shim for formatters_code"""
+    return str(m)
 
 @mod.action_class
 class Actions:
@@ -74,6 +49,19 @@ class Actions:
             text = formatters_list[format](text)
         return text
 
+    def unformat_text(text: str) -> str:
+        """Remove format from text"""
+        # Remove quotes
+        text = de_string(text)
+        # Split on delimiters. A delimiter char followed by a blank space is no delimiter.
+        result = re.sub(r"[-_.:/](?!\s)+", " ", text)
+        # Split camel case. Including numbers
+        result = de_camel(result)
+        # Delimiter/camel case successfully split. Lower case to restore "original" text.
+        if text != result:
+            result = result.lower()
+        return result    
+
 def format_words(text, splitter, delimiter, func_first=None, func_rest=None):
     func_first = func_first or none
     func_rest = func_rest or none
@@ -81,6 +69,22 @@ def format_words(text, splitter, delimiter, func_first=None, func_rest=None):
     transform = [func_first(words[0])] + [func_rest(w) for w in words[1:]]
     return delimiter.join(transform)
 
+def de_camel(text: str) -> str:
+    """Replacing camelCase boundaries with blank space"""
+    return re.sub(
+        r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])|(?<=[0-9])(?=[a-zA-Z])",
+        " ",
+        text,
+    )
+
+def de_string(text: str) -> str:
+    """Remove quotes around a selected string"""
+    if text[0] == "'" or text[0] == '"':
+        text = text[1:]
+    if text[-1] == "'" or text[-1] == '"':
+        text = text[:-1]
+    return text
+    
 def split(text: str) -> List[str]:
     return text.split(" ")
 
