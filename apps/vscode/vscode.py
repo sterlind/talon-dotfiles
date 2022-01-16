@@ -13,7 +13,7 @@ and app.exe: Code.exe
 ctx.matches = r"""
 app: vscode
 """
-ctx.tags = ["user.tabs"]
+ctx.tags = ["user.tabs", "user.navigation"]
 
 @mod.action_class
 class Actions:
@@ -24,3 +24,10 @@ class Actions:
             lines = [l.lstrip(" ") for l in snippet.split("\n")]
         snippet = "\n".join(lines)
         actions.user.vscode("editor.action.insertSnippet", {"snippet": snippet})
+
+@ctx.action_class("user")
+class UserActions:
+    def go_back():
+        actions.user.vscode("workbench.action.navigateBack")
+    def go_forward():
+        actions.user.vscode("workbench.action.navigateForward")

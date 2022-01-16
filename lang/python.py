@@ -70,6 +70,14 @@ ctx.lists["self.constants"] = {
     "empty string": "\"\""
 }
 
+mod.list("known_functions", "Known function names")
+ctx.lists["self.known_functions"] = {
+    "string": "str",
+    "int": "int",
+    "length": "len",
+    "is instance": "isinstance"
+}
+
 @mod.capture(rule="{user.infix_operators} | {user.unary_operators}")
 def operator_syntax(m) -> str:
     return str(m)
@@ -115,14 +123,18 @@ def parameters_syntax(m) -> List[str]:
 def arguments_syntax(m) -> List[str]:
     return m.compound_name_syntax_list
 
-@mod.capture(rule="call <user.compound_name_syntax> [with <user.arguments_syntax>]")
+@mod.capture(rule = "{user.known_functions} | <user.compound_name_syntax>")
+def function_name_syntax(m) -> str:
+    return str(m)
+
+@mod.capture(rule="call <user.function_name_syntax> [with <user.arguments_syntax>]")
 def call_syntax(m) -> str:
     try:
-        return f"{m.compound_name_syntax}({m.arguments_syntax})"
+        return f"{m.function_name_syntax}({m.arguments_syntax})"
     except AttributeError:
-        return f"{m.compound_name_syntax}()"
+        return f"{m.function_name_syntax}()"
 
-@mod.capture(rule="<user.formatted_string> | <user.number> | <user.compound_name_syntax> | {user.constants}")
+@mod.capture(rule="<user.formatted_string> | <number> | <user.compound_name_syntax> | {user.constants}")
 def value_syntax(m) -> str:
     return str(m)
 

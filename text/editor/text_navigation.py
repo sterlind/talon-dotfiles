@@ -54,8 +54,8 @@ class TextNavigationActions:
     def copy_direction(direction: List[str]):
         """selects text in a particular direction"""
         actions.self.select_direction(direction)
-        actions.self.copy()
+        actions.edit.copy()
     def delete_direction(direction: List[str]):
         """deletes text in a particular direction"""
         actions.self.select_direction(direction)
-        actions.self.delete()
+        actions.edit.delete()

@@ -14,8 +14,9 @@ pass <user.value_syntax> (and <user.value_syntax>)*:
     user.code_parameter(value_syntax_list)
 also (pass|import) <user.value_syntax> (and <user.value_syntax>)*:
     user.code_parameter(value_syntax_list, ", ")
-(document) <phrase> [over]:
-    user.insert_snippet("\"\"\"{phrase}\"\"\"")
+document <user.text>:
+    result = user.format_text(text, "SENTENCE_CASE")
+    insert("\"\"\"{result}\"\"\"")
 explain <user.text>$:
     result = user.format_text(text, "SENTENCE_CASE")
     insert("# {result}")
@@ -23,7 +24,7 @@ explain <user.text>$:
 returns type <user.type_syntax>:
     user.vscode("jumpToNextSnippetPlaceholder")
     insert(" -> {type_syntax}")
-call <user.compound_name_syntax>: user.insert_snippet("{compound_name_syntax}($0)")
+call <user.function_name_syntax>: user.insert_snippet("{function_name_syntax}($0)")
 return <user.value_syntax>: user.insert_snippet("return {value_syntax}$0")
 return: user.insert_snippet("return $1")
 # format: user.insert_snippet("f\"$0\"")
@@ -39,7 +40,7 @@ import <user.compound_name_syntax>: user.insert_snippet("import {compound_name_s
 class <user.class_syntax>: user.insert_snippet("class {class_syntax}:\n\t$0")
 from <user.compound_name_syntax> import <user.name_syntax> ([and] <user.name_syntax>)*:
     user.code_import(compound_name_syntax, name_syntax_list)
-map: user.insert_snippet("{{\n\t$1\n\}}")
+map: user.insert_snippet("{{\n\t$1\n}}")
 array: user.insert_snippet("[\n\t$1\n]")
 ternary: user.insert_snippet("$1 if $2 else $3")
 lambda <user.name_syntax> [does]:
@@ -52,6 +53,6 @@ try: user.insert_snippet("try:\n\t$1\nexcept $2:\n\t$3")
 op <user.value_syntax> {user.infix_operators} <user.value_syntax>:
     user.insert_snippet("{value_syntax_1} {infix_operators} {value_syntax_2}$0")
 op <user.operator_syntax>: insert(" {operator_syntax} ")
-op <user.operator_syntax> <user.value_syntax>: user.insert_snippet(" {operator_syntax} {value_syntax}$0")
-op <user.value_syntax> <user.operator_syntax>: user.insert_snippet("{value_syntax} {operator_syntax} $1")
+op <user.operator_syntax> <user.value_syntax>: insert(" {operator_syntax} {value_syntax}")
+op <user.value_syntax> <user.operator_syntax>: insert("{value_syntax} {operator_syntax} ")
 index: user.insert_snippet("[$1]$0")
