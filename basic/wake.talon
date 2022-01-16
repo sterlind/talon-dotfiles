@@ -1,4 +1,6 @@
 mode: all
 -
-^abracadabra$: speech.enable()
-^drowse$: speech.disable()
+^(abracadabra|alakazam)$: speech.enable()
+^drowse$:
+    speech.disable()
+    user.mouse_disable()

@@ -8,6 +8,11 @@ mod.mode("mouse")
 
 @mod.action_class
 class Actions:
+    def mouse_disable():
+        """Disable the mouse mode"""
+        toggle_control(False)
+        actions.mode.disable("user.mouse")
+
     def mouse_toggle():
         "Toggle mouse mode"
         enabled = not config.control_mouse
