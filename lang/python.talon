@@ -56,3 +56,5 @@ op <user.operator_syntax>: insert(" {operator_syntax} ")
 op <user.operator_syntax> <user.value_syntax>: insert(" {operator_syntax} {value_syntax}")
 op <user.value_syntax> <user.operator_syntax>: insert("{value_syntax} {operator_syntax} ")
 index: user.insert_snippet("[$1]$0")
+with as <user.name_syntax>:
+    user.insert_snippet("with $1 as {name_syntax}:\n\t$0")

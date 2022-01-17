@@ -97,3 +97,15 @@ pop all symbol <user.text> [halt]:
     sleep(250ms)
     key(enter)
     sleep(50ms)
+
+# Debug commands
+run program:                     user.vscode("workbench.action.debug.run")
+debug (program | start):         user.vscode("workbench.action.debug.start")
+breakpoint:                      user.vscode("editor.debug.action.toggleBreakpoint")
+continue:                        user.vscode("workbench.action.debug.continue")
+step over:                       user.vscode("workbench.action.debug.stepOver")
+step into:                       user.vscode("workbench.action.debug.stepInto")
+step out:                        user.vscode("workbench.action.debug.stepOut")
+debug restart:                   user.vscode("workbench.action.debug.restart")
+debug pause:                     user.vscode("workbench.action.debug.pause")
+debug stop:                      user.vscode("workbench.action.debug.stop")

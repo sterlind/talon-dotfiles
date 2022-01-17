@@ -11,6 +11,7 @@ class Actions:
     def mouse_disable():
         """Disable the mouse mode"""
         toggle_control(False)
+        assert not config.control_mouse
         actions.mode.disable("user.mouse")
 
     def mouse_toggle():
