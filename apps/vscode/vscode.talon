@@ -72,12 +72,12 @@ file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
 save: user.vscode("workbench.action.files.saveWithoutFormatting")
 
 # Search commands
-scout symbol [<user.text>] [over]:
+symbol hunt [<user.text>] [over]:
     user.vscode("workbench.action.gotoSymbol")
     sleep(50ms)
     insert(text or "")
 
-pop symbol <user.text> [over]:
+symbol pop <user.text> [over]:
     user.vscode("workbench.action.gotoSymbol")
     sleep(50ms)
     insert(text or "")
@@ -85,12 +85,12 @@ pop symbol <user.text> [over]:
     key(enter)
     sleep(50ms)
 
-scout all symbol [<user.text>] [halt]:
+symbol hunt all [<user.text>] [halt]:
     user.vscode("workbench.action.showAllSymbols")
     sleep(50ms)
     insert(text or "")
 
-pop all symbol <user.text> [halt]:
+symbol pop all <user.text> [halt]:
     user.vscode("workbench.action.showAllSymbols")
     sleep(50ms)
     insert(text or "")

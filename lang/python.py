@@ -67,7 +67,12 @@ ctx.lists["self.constants"] = {
     "true": "True",
     "false": "False",
     "none": "None",
-    "empty string": "\"\""
+    "empty string": "\"\"",
+    "empty array": "[]",
+    "empty list": "[]",
+    "empty dictionary": "{}",
+    "empty dict": "{}",
+    "empty map": "{}",
 }
 
 mod.list("known_functions", "Known function names")

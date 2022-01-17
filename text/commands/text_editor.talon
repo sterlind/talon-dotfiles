@@ -20,5 +20,5 @@ zing: edit.indent_less()
 indent: edit.indent_more()
 
 # Search commands
-scout this: edit.find()
-scout next: edit.find_next()
+(hunt|scout) this: edit.find()
+(hunt|scout) next: edit.find_next()
