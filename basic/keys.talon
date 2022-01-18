@@ -5,5 +5,5 @@
 key <user.key_unmodified>: key(key_unmodified)
 space: key(" ")
 enter: key("enter")
-(thump | backspace): key("backspace")
+(back | backspace): key("backspace")
 ^escape$: key("escape")

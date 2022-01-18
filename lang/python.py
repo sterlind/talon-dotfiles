@@ -37,6 +37,9 @@ ctx.lists["self.keywords"] = [
     "array",
     "try",
     "set",
+    "state",
+    "op",
+    "index"
     # "class"
 ]
 
@@ -47,11 +50,16 @@ ctx.lists["self.infix_operators"] = {
     "times": "*",
     "divides": "/",
     "less": "<",
+    "less than": "<",
     "more": ">",
+    "greater than": ">",
     "less equal": "<=",
-    "more equal": ">=",
+    "is greater or equal to": ">=",
+    "greater equals": ">=",
     "equal": "==",
-    "not equal": "!=",
+    "is not": "!=",
+    "is not equal to": "!=",
+    "not equals": "!=",
     "or": "or",
     "and": "and",
     "assign": "="
@@ -96,11 +104,19 @@ def type_syntax(m) -> str:
     return str(m)
 
 @mod.capture(rule="<user.letter_or_number> | (<user.word>+ [{user.keywords}])")
-def name_syntax(m) -> str:
+def raw_name_syntax(m) -> str:
     try:
         return m.letter_or_number
     except AttributeError:
         return actions.user.format_text(" ".join(m.word_list), "SNAKE_CASE")
+
+@mod.capture(rule="const <user.raw_name_syntax>")
+def constant_name_syntax(m) -> str:
+    return m.raw_name_syntax
+    
+@mod.capture(rule="<user.constant_name_syntax> | <user.raw_name_syntax>")
+def name_syntax(m) -> str:
+    return getattr(m, "constant_name_syntax", m.raw_name_syntax)
 
 @mod.capture(rule="<user.name_syntax> [(dot <user.name_syntax>)+]")
 def compound_name_syntax(m) -> str:
