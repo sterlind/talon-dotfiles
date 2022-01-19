@@ -38,20 +38,20 @@ op <user.value_syntax> <user.operator_syntax>: insert("{value_syntax} {operator_
 
 # Constants
 make {user.constants}: insert("{constants}")
-snip index: user.insert_snippet("[$1]$0")
+make index: user.insert_snippet("[$1]$0")
 index <user.value_syntax>: insert("[{value_syntax}]")
 
-snip map: user.insert_snippet("{{\n\t$1\n}}")
-snip array: user.insert_snippet("[\n\t$1\n]")
+make map: user.insert_snippet("{{\n\t$1\n}}")
+make array: user.insert_snippet("[\n\t$1\n]")
 
 # Expression constructors
-snip [list] comp: user.insert_snippet("[$1 for $2 in $3]")
+make [list] comp: user.insert_snippet("[$1 for $2 in $3]")
 list comp for <user.name_syntax> in: user.insert_snippet("[$2 for {name_syntax} in $1]")
 
 lambda <user.name_syntax> [does]:
     insert("lambda {name_syntax}: ")
 
-snip ternary: user.insert_snippet("$1 if $2 else $3")
+make ternary: user.insert_snippet("$1 if $2 else $3")
 <user.value_syntax> if <user.value_syntax> else <user.value_syntax>:
     insert("{value_syntax_1} if {value_syntax_2} else {value_syntax_3}")
 
