@@ -23,12 +23,39 @@ copy all:
     edit.delete()
 (delete|clear|chuck) last: user.history_clear_last_phrase()
 
+# Matching braces
+prince:
+    insert("()")
+    edit.left()
+
+angles:
+    insert("<>")
+    edit.left()
+
+brace:
+    insert("{}")
+    edit.left()
+
+square:
+    insert("[]")
+    edit.left()
+
+quad:
+    insert("\"\"")
+    edit.left()
+
+twin:
+    insert("''")
+    edit.left()
+
 # Line commands
 slap:
     key(end)
     key(enter)
 zing: edit.indent_less()
 indent: edit.indent_more()
+push: key("tab")
+pull: key("shift-tab")
 
 # Search commands
 (hunt|scout) this: edit.find()

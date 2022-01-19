@@ -125,21 +125,21 @@ ctx.lists["self.key_symbol"] = {
     "amper":            "&",
     "at sign":          "@",
 
-    "dubquote":            '"',
-    "quote":       "'",
+    "dubquote":         '"',
+    "quote":            "'",
     "brick":            "`",
 
     "slash":            "/",
     "backslash":        "\\",
     "pipe":             "|",
 
-    "paren":            "(",
+    "laren":            "(",
     "rearen":           ")",
-    "brace":            "{",
+    "lace":             "{",
     "race":             "}",
-    "square":           "[",
+    "lair":             "[",
     "rare":             "]",
-    "angle":            "<",
+    "langle":           "<",
     "rangle":           ">",
 
     "caret":            "^",
