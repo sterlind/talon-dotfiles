@@ -67,8 +67,8 @@ return <user.value_syntax>: user.insert_snippet("return {value_syntax}$0")
 
 # Control flow
 if [call]: user.insert_snippet("if $1:\n\t$0")
-if <user.value_syntax>: user.insert_snippet("if {value_syntax}:\n\t$0")
-if not <user.value_syntax>: user.insert_snippet("if not {value_syntax}:\n\t$0")
+if <user.logic_syntax>: user.insert_snippet("if {logic_syntax}:\n\t$0")
+# if not <user.value_syntax>: user.insert_snippet("if not {value_syntax}:\n\t$0")
 
 make for: user.insert_snippet("for $1 in $2:\n\t$0")
 for <user.name_syntax> in:
@@ -88,7 +88,7 @@ make pass: insert("pass")
 
 # Top level syntax:
 # Class declaration
-declare class <user.class_syntax>: user.insert_snippet("class {class_syntax}:\n\t$0")
+make class <user.class_syntax>: user.insert_snippet("class {class_syntax}:\n\t$0")
 
 # Function declaration
 funk <user.name_syntax>:

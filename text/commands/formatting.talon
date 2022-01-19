@@ -5,4 +5,5 @@
 phrase <user.words>$: "{words}"
 phrase <user.words> over: "{words}"
 word <user.word>: "{word}"
+num <number>: "{number}"
 cap <user.word>: user.insert_formatted(word, "PROPER_CASE")

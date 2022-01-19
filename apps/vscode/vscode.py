@@ -25,6 +25,13 @@ class Actions:
         snippet = "\n".join(lines)
         actions.user.vscode("editor.action.insertSnippet", {"snippet": snippet})
 
+@ctx.action_class("win")
+class WinActions:
+    def filename():
+        parts = actions.win.title().split(" - ")
+        result = parts[0]
+        return result if "." else ""
+            
 @ctx.action_class("user")
 class UserActions:
     def go_back():

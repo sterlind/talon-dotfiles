@@ -43,12 +43,17 @@ ctx.lists["self.keywords"] = [
     # "class"
 ]
 
-mod.list("infix_operators", "Binary infix operators")
-ctx.lists["self.infix_operators"] = {
+mod.list("infix_other_operators", "Binary infix operators besides logical ones")
+ctx.lists["self.infix_other_operators"] = {
     "plus": "+",
     "minus": "-",
     "times": "*",
     "divides": "/",
+    "assign": "="
+}
+
+mod.list("infix_logical_operators", "Infix logical operators")
+ctx.lists["self.infix_logical_operators"] = {
     "less": "<",
     "less than": "<",
     "more": ">",
@@ -62,7 +67,7 @@ ctx.lists["self.infix_operators"] = {
     "not equals": "!=",
     "or": "or",
     "and": "and",
-    "assign": "="
+    "in": "in"
 }
 
 mod.list("unary_operators", "Unary prefix operators")
@@ -88,10 +93,11 @@ ctx.lists["self.known_functions"] = {
     "string": "str",
     "int": "int",
     "length": "len",
-    "is instance": "isinstance"
+    "is instance": "isinstance",
+    "get adder": "getattr"
 }
 
-@mod.capture(rule="{user.infix_operators} | {user.unary_operators}")
+@mod.capture(rule="{user.infix_other_operators} | {user.infix_logical_operators} | {user.unary_operators}")
 def operator_syntax(m) -> str:
     return str(m)
 
@@ -155,7 +161,27 @@ def call_syntax(m) -> str:
     except AttributeError:
         return f"{m.function_name_syntax}()"
 
-@mod.capture(rule="<user.formatted_string> | <number> | <user.compound_name_syntax> | {user.constants}")
+@mod.capture(rule="{user.unary_operators} <user.value_syntax>")
+def unary_logic_syntax(m) -> str:
+    return str(m)
+
+@mod.capture(rule="<user.value_syntax> {user.infix_logical_operators} <user.value_syntax>")
+def binary_logic_syntax(m) -> str:
+    return str(m)
+
+@mod.capture(rule="<user.unary_logic_syntax> | <user.binary_logic_syntax> | <user.value_syntax>")
+def logic_syntax(m) -> str:
+    return str(m)
+
+@mod.capture(rule="string [<user.formatters_code>] <user.word_separated_string> [{user.keywords}]")
+def string_constant_syntax(m) -> str:
+    formatters = getattr(m, "formatters_code", None)
+    text = m.word_separated_string
+    if formatters:
+        text = actions.user.insert_formatted(m.word_separated_string, formatters)
+    return f"\"{text}\""
+
+@mod.capture(rule=" {user.constants} | <user.string_constant_syntax> | <user.compound_name_syntax> | <number>")
 def value_syntax(m) -> str:
     return str(m)
 
