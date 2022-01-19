@@ -10,6 +10,7 @@ redo that: edit.redo()
 go <user.navigation_direction>: user.go_direction(navigation_direction)
 (select|take) <user.navigation_direction>: user.select_direction(navigation_direction)
 (select|take) all: edit.select_all()
+(select|take) last: user.history_select_last_phrase()
 
 copy <user.navigation_direction>: user.copy_direction(navigation_direction)
 copy all:
@@ -17,10 +18,10 @@ copy all:
     edit.copy()
 
 (delete|clear|chuck) <user.navigation_direction>: user.delete_direction(navigation_direction)
-chuck all:
+(delete|clear|chuck) all:
     edit.select_all()
     edit.delete()
-chuck last: user.history_clear_last_phrase()
+(delete|clear|chuck) last: user.history_clear_last_phrase()
 
 # Line commands
 slap:
