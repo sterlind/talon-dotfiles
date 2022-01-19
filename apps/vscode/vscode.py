@@ -13,7 +13,7 @@ and app.exe: Code.exe
 ctx.matches = r"""
 app: vscode
 """
-ctx.tags = ["user.tabs", "user.navigation"]
+ctx.tags = ["user.tabs", "user.navigation", "user.find_and_replace"]
 
 @mod.action_class
 class Actions:
@@ -36,3 +36,37 @@ class UserActions:
         actions.user.vscode("workbench.action.closeAllEditors")
     def tab_close_others():
         actions.user.vscode("workbench.action.closeOtherEditors")
+
+    # Find and replace:
+    def find_next():
+        actions.user.vscode("editor.action.nextMatchFindAction")
+    def find_previous():
+        actions.user.vscode("editor.action.previousMatchFindAction")
+    def find_everywhere(text: str):
+        actions.user.vscode("workbench.action.findInFiles")
+    def find_toggle_match_by_case():
+        actions.key("alt-c")
+    def find_toggle_match_by_word():
+        actions.key("alt-w")
+    def find_toggle_match_by_regex():
+        actions.key("alt-r")
+    def replace(text: str):
+        actions.key("ctrl-h")
+        if text:
+            actions.insert(text)
+    def replace_everywhere(text: str):
+        actions.key("ctrl-shift-h")
+        if text:
+            actions.insert(text)
+    def replace_confirm():
+        actions.key("ctrl-shift-1")
+    def replace_confirm_all():
+        actions.key("ctrl-alt-enter")
+    def select_previous_occurrence(text: str):
+        actions.edit.find(text)
+        actions.sleep("100ms")
+        actions.key("shift-enter esc")
+    def select_next_occurrence(text: str):
+        actions.edit.find(text)
+        actions.sleep("100ms")
+        actions.key("esc")

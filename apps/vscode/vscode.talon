@@ -3,6 +3,7 @@ app: vscode
 tag(): user.tabs
 tag(): user.git
 tag(): user.navigation
+tag(): user.find_and_replace
 
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
 action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")

@@ -1,20 +1,21 @@
-from talon import Context, actions, ui, Module, app
-from typing import Union
+from talon import actions, Module
 
 mod = Module()
 mod.tag("find_and_replace", desc="Tag for enabling generic find and replace commands")
-
 
 @mod.action_class
 class Actions:
     def find(text: str):
         """Finds text in current editor"""
+        actions.edit.find(text)
 
     def find_next():
         """Navigates to the next occurrence"""
+        actions.edit.find_next()
 
     def find_previous():
         """Navigates to the previous occurrence"""
+        actions.key("shift-f3")
 
     def find_everywhere(text: str):
         """Finds text across project"""

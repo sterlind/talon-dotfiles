@@ -114,6 +114,8 @@ class EditActions:
     # Search actions
     def find(text: str = None):
         actions.key("ctrl-f")
+        if text:
+            actions.insert(text)
     def find_next():
         actions.key("f3")
     

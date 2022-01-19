@@ -37,7 +37,7 @@ op <user.operator_syntax> <user.value_syntax>: insert(" {operator_syntax} {value
 op <user.value_syntax> <user.operator_syntax>: insert("{value_syntax} {operator_syntax} ")
 
 # Constants
-state {user.constants}: insert("{constants}")
+make {user.constants}: insert("{constants}")
 snip index: user.insert_snippet("[$1]$0")
 index <user.value_syntax>: insert("[{value_syntax}]")
 
@@ -70,21 +70,21 @@ if [call]: user.insert_snippet("if $1:\n\t$0")
 if <user.value_syntax>: user.insert_snippet("if {value_syntax}:\n\t$0")
 if not <user.value_syntax>: user.insert_snippet("if not {value_syntax}:\n\t$0")
 
-block for: user.insert_snippet("for $1 in $2:\n\t$0")
+make for: user.insert_snippet("for $1 in $2:\n\t$0")
 for <user.name_syntax> in:
     user.insert_snippet("for {name_syntax} in $1:\n\t$2")
 for <user.name_syntax> in <user.name_syntax>:
     user.insert_snippet("for {name_syntax_1} in {name_syntax_2}:\n\t$1")
 
-block while: user.insert_snippet("while $1:\n\t$0")
+make while: user.insert_snippet("while $1:\n\t$0")
 while <user.value_syntax>: insert("while {value_syntax}:\n\t")
 
-block try: user.insert_snippet("try:\n\t$1\nexcept $2:\n\t$3")
+make try: user.insert_snippet("try:\n\t$1\nexcept $2:\n\t$3")
 
 with as <user.name_syntax>:
     user.insert_snippet("with $1 as {name_syntax}:\n\t$0")
 
-state pass: insert("pass")
+make pass: insert("pass")
 
 # Top level syntax:
 # Class declaration
