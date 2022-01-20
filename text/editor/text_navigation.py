@@ -39,23 +39,24 @@ def navigation_direction(m) -> List[str]:
 def prepend_modifier(modifier, keys):
     return [f"{modifier}-{key}" for key in keys]
 
-def apply_key_sequence(keys):
-    for key in keys:
-        actions.key(key)        
+def apply_key_sequence(keys, count):
+    for _ in range(count):        
+        for key in keys:
+            actions.key(key)        
 
 @mod.action_class
 class TextNavigationActions:
-    def go_direction(direction: List[str]):
+    def go_direction(direction: List[str], count: int = 1):
         """goes in a particular direction"""
-        apply_key_sequence(direction)
-    def select_direction(direction: List[str]):
+        apply_key_sequence(direction, count)
+    def select_direction(direction: List[str], count: int = 1):
         """selects text in a particular direction"""
-        apply_key_sequence(prepend_modifier("shift", direction))
-    def copy_direction(direction: List[str]):
+        apply_key_sequence(prepend_modifier("shift", direction), count)
+    def copy_direction(direction: List[str], count: int = 1):
         """selects text in a particular direction"""
-        actions.self.select_direction(direction)
+        actions.self.select_direction(direction, count)
         actions.edit.copy()
-    def delete_direction(direction: List[str]):
+    def delete_direction(direction: List[str], count: int = 1):
         """deletes text in a particular direction"""
-        actions.self.select_direction(direction)
+        actions.self.select_direction(direction, count)
         actions.edit.delete()

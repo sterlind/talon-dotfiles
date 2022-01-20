@@ -61,6 +61,8 @@ class UserActions:
         actions.user.vscode("editor.action.previousMatchFindAction")
     def find_everywhere(text: str):
         actions.user.vscode("workbench.action.findInFiles")
+        if text:
+            actions.insert(text)
     def find_toggle_match_by_case():
         actions.key("alt-c")
     def find_toggle_match_by_word():

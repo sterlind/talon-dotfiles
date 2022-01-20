@@ -109,12 +109,11 @@ def complex_type_syntax(m) -> str:
 def type_syntax(m) -> str:
     return str(m)
 
-@mod.capture(rule="<user.letter_or_number> | (<user.word>+ [{user.keywords}])")
+@mod.capture(rule="nothing | <user.letter> | (<user.word>+ [{user.keywords}])")
 def raw_name_syntax(m) -> str:
-    try:
-        return m.letter_or_number
-    except AttributeError:
-        return actions.user.format_text(" ".join(m.word_list), "SNAKE_CASE")
+    identifier = getattr(m, "letter", None)
+    identifier = identifier if identifier else getattr(m, "word", "_")
+    return identifier
 
 @mod.capture(rule="const <user.raw_name_syntax>")
 def constant_name_syntax(m) -> str:
@@ -130,10 +129,7 @@ def compound_name_syntax(m) -> str:
 
 @mod.capture(rule="(<user.word>+ [{user.keywords}])")
 def class_syntax(m) -> str:
-    try:
-        return m.letter_or_number
-    except AttributeError:
-        return actions.user.format_text(" ".join(m.word_list), "HAMMER_CASE")
+    return actions.user.format_text(" ".join(m.word_list), "HAMMER_CASE")
 
 @mod.capture(rule=" <user.name_syntax> [type <user.type_syntax>]")
 def parameter_syntax(m) -> str:

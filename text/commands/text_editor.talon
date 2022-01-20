@@ -8,16 +8,23 @@ redo that: edit.redo()
 
 # Navigation commands
 go <user.navigation_direction>: user.go_direction(navigation_direction)
+go <user.navigation_direction> <number_small>: user.go_direction(navigation_direction, number_small)
+head: edit.line_start()
+tail: edit.line_end()
+
 (select|take) <user.navigation_direction>: user.select_direction(navigation_direction)
+(select|take) <user.navigation_direction> <number_small>: user.select_direction(navigation_direction, number_small)
 (select|take) all: edit.select_all()
 (select|take) last: user.history_select_last_phrase()
 
 copy <user.navigation_direction>: user.copy_direction(navigation_direction)
+copy <user.navigation_direction> <number_small>: user.copy_direction(navigation_direction, number_small)
 copy all:
     edit.select_all()
     edit.copy()
 
 (delete|clear|chuck) <user.navigation_direction>: user.delete_direction(navigation_direction)
+(delete|clear|chuck) <user.navigation_direction> <number_small>: user.delete_direction(navigation_direction, number_small)
 (delete|clear|chuck) all:
     edit.select_all()
     edit.delete()
