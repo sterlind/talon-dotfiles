@@ -57,18 +57,17 @@ make ternary: user.insert_snippet("$1 if $2 else $3")
 
 # [Statements]
 # Variable assignment
-(set|var) <user.compound_name_syntax> (to|is): user.insert_snippet("{compound_name_syntax} = $1")
-(set|var) <user.compound_name_syntax> (to|is) <user.value_syntax>: user.insert_snippet("{compound_name_syntax} = {value_syntax}")
+(set|var) <user.compound_name_syntax> (to|is): insert("{compound_name_syntax} = ")
+(set|var) <user.compound_name_syntax> (to|is) <user.value_syntax>: insert("{compound_name_syntax} = {value_syntax}")
 var <user.compound_name_syntax>: insert(compound_name_syntax)
 
-return nothing: user.insert_snippet("return")
+return nothing: insert("return")
 return: user.insert_snippet("return $1")
-return <user.value_syntax>: user.insert_snippet("return {value_syntax}$0")
+return <user.value_syntax>: insert("return {value_syntax}")
 
 # Control flow
 if [call]: user.insert_snippet("if $1:\n\t$0")
 if <user.logic_syntax>: user.insert_snippet("if {logic_syntax}:\n\t$0")
-# if not <user.value_syntax>: user.insert_snippet("if not {value_syntax}:\n\t$0")
 
 make for: user.insert_snippet("for $1 in $2:\n\t$0")
 for <user.name_syntax> in:

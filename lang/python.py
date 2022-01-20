@@ -109,27 +109,30 @@ def complex_type_syntax(m) -> str:
 def type_syntax(m) -> str:
     return str(m)
 
-@mod.capture(rule="nothing | <user.letter> | (<user.word>+ [{user.keywords}])")
-def raw_name_syntax(m) -> str:
-    identifier = getattr(m, "letter", None)
-    identifier = identifier if identifier else getattr(m, "word", "_")
-    return identifier
+# @mod.capture(rule="nothing | <user.letter> | (<user.word>+ [{user.keywords}])")
+@mod.capture(rule="<user.word>+ [{user.keywords}]")
+def raw_name_syntax(m) -> List[str]:
+    return m.word_list
 
 @mod.capture(rule="const <user.raw_name_syntax>")
 def constant_name_syntax(m) -> str:
-    return m.raw_name_syntax
+    return actions.user.format_text(m.raw_name_syntax, "ALL_CAPS,SNAKE_CASE")
+
+@mod.capture(rule="<user.raw_name_syntax>")
+def variable_name_syntax(m) -> str:
+    return actions.user.format_text(m.raw_name_syntax, "SNAKE_CASE")
     
-@mod.capture(rule="<user.constant_name_syntax> | <user.raw_name_syntax>")
+@mod.capture(rule="<user.letter> | <user.constant_name_syntax> | <user.variable_name_syntax>")
 def name_syntax(m) -> str:
-    return getattr(m, "constant_name_syntax", m.raw_name_syntax)
+    return str(m)
+
+@mod.capture(rule="<user.raw_name_syntax>")
+def class_syntax(m) -> str:
+    return actions.user.format_text(m.raw_name_syntax, "HAMMER_CASE")
 
 @mod.capture(rule="<user.name_syntax> [(dot <user.name_syntax>)+]")
 def compound_name_syntax(m) -> str:
     return ".".join(m.name_syntax_list)
-
-@mod.capture(rule="(<user.word>+ [{user.keywords}])")
-def class_syntax(m) -> str:
-    return actions.user.format_text(" ".join(m.word_list), "HAMMER_CASE")
 
 @mod.capture(rule=" <user.name_syntax> [type <user.type_syntax>]")
 def parameter_syntax(m) -> str:

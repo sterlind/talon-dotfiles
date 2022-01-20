@@ -1,6 +1,6 @@
 from talon import Module, Context, actions
 import re
-from typing import List
+from typing import List, Union
 
 mod = Module()
 ctx = Context()
@@ -43,8 +43,10 @@ def formatters(m) -> str:
 
 @mod.action_class
 class Actions:
-    def format_text(text: str, formatters: str) -> str:
+    def format_text(text: Union[str, List[str]], formatters: str) -> str:
         "Formats text with comma-separated formatter list."
+        if not isinstance(text, str):
+            text = " ".join(text)
         for format in reversed(formatters.split(",")):
             text = formatters_list[format](text)
         return text
