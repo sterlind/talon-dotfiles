@@ -12,10 +12,6 @@ action(app.tab_reopen): user.vscode("workbench.action.reopenClosedEditor")
 action(app.window_close): user.vscode("workbench.action.closeWindow")
 action(app.window_open): user.vscode("workbench.action.newWindow")
 
-^git commit$: user.vscode("git.commitStaged")
-^git status$: user.vscode("workbench.scm.focus")
-^git pull$: user.vscode("git.pullRebase")
-
 # Split
 split up:                        user.vscode("workbench.action.moveEditorToAboveGroup")
 split down:                      user.vscode("workbench.action.moveEditorToBelowGroup")

@@ -13,7 +13,7 @@ and app.exe: Code.exe
 ctx.matches = r"""
 app: vscode
 """
-ctx.tags = ["user.tabs", "user.navigation", "user.find_and_replace"]
+ctx.tags = ["user.tabs", "user.navigation", "user.find_and_replace", "user.git"]
 
 @mod.action_class
 class Actions:
@@ -44,6 +44,16 @@ class UserActions:
     def tab_close_others():
         actions.user.vscode("workbench.action.closeOtherEditors")
 
+    # Git integration:
+    def git_status():
+        actions.user.vscode("workbench.scm.focus")
+    def git_commit():
+        actions.user.vscode("git.commitStaged")
+    def git_push():
+        actions.user.vscode("git.push")
+    def git_pull():
+        actions.user.vscode("git.pull")
+        
     # Find and replace:
     def find_next():
         actions.user.vscode("editor.action.nextMatchFindAction")
