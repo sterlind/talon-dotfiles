@@ -4,6 +4,7 @@ tag(): user.tabs
 tag(): user.git
 tag(): user.navigation
 tag(): user.find_and_replace
+tag(): user.scoped_navigation
 
 action(app.tab_close): user.vscode("workbench.action.closeActiveEditor")
 action(app.tab_next): user.vscode("workbench.action.nextEditorInGroup")
@@ -37,12 +38,6 @@ bar search:                      user.vscode("workbench.view.search")
 bar source:                      user.vscode("workbench.view.scm")
 bar file:                        user.vscode("workbench.files.action.showActiveFileInExplorer")
 
-ref last:                        user.vscode("references-view.prev")
-ref next:                        user.vscode("references-view.next")
-
-hunt all: user.vscode("workbench.action.findInFiles")
-result next: key(f4)
-result previous: key(shift-f4)
 results collapse: user.vscode("workbench.files.action.collapseExplorerFolders")
 
 next:                            user.vscode("jumpToNextSnippetPlaceholder")
@@ -51,10 +46,6 @@ nope: key(ctrl-z)
 redo: key(ctrl-y)
 
 # File commands
-file hunt [<user.text>]:
-    user.vscode("workbench.action.quickOpen")
-    sleep(50ms)
-    insert(text or "")
 file create sibling: user.vscode("explorer.newFile")
 file rename:
     user.vscode("fileutils.renameFile")
@@ -68,33 +59,6 @@ file open folder: user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
 save: user.vscode("workbench.action.files.saveWithoutFormatting")
 
-# Search commands
-symbol hunt [<user.text>] [over]:
-    user.vscode("workbench.action.gotoSymbol")
-    sleep(50ms)
-    insert(text or "")
-
-symbol pop <user.text> [over]:
-    user.vscode("workbench.action.gotoSymbol")
-    sleep(50ms)
-    insert(text or "")
-    sleep(250ms)
-    key(enter)
-    sleep(50ms)
-
-symbol hunt all [<user.text>] [halt]:
-    user.vscode("workbench.action.showAllSymbols")
-    sleep(50ms)
-    insert(text or "")
-
-symbol pop all <user.text> [halt]:
-    user.vscode("workbench.action.showAllSymbols")
-    sleep(50ms)
-    insert(text or "")
-    sleep(250ms)
-    key(enter)
-    sleep(50ms)
-
 # Debug commands
 run program:                     user.vscode("workbench.action.debug.run")
 debug (program | start):         user.vscode("workbench.action.debug.start")
@@ -106,3 +70,51 @@ step out:                        user.vscode("workbench.action.debug.stepOut")
 debug restart:                   user.vscode("workbench.action.debug.restart")
 debug pause:                     user.vscode("workbench.action.debug.pause")
 debug stop:                      user.vscode("workbench.action.debug.stop")
+
+# Search commands
+hunt all: user.vscode("workbench.action.findInFiles")
+
+result next: key(f4)
+result previous: key(shift-f4)
+
+ref last:                        user.vscode("references-view.prev")
+ref next:                        user.vscode("references-view.next")
+
+# Navigation commands
+# {user.keyword_list} (file|dock) [<user.text>] [over]:
+#     user.vscode("workbench.action.quickOpen")
+#     sleep(50ms)
+#     insert(text or "")
+
+# {user.keyword_go} (file|dock) [<user.text>] [over]:
+#     user.vscode("workbench.action.quickOpen")
+#     sleep(50ms)
+#     insert(text or "")
+#     key(enter)
+#     sleep(50ms)
+
+# symbol hunt [<user.text>] [over]:
+#     user.vscode("workbench.action.gotoSymbol")
+#     sleep(50ms)
+#     insert(text or "")
+
+# symbol pop <user.text> [over]:
+#     user.vscode("workbench.action.gotoSymbol")
+#     sleep(50ms)
+#     insert(text or "")
+#     sleep(250ms)
+#     key(enter)
+#     sleep(50ms)
+
+# symbol hunt all [<user.text>] [halt]:
+#     user.vscode("workbench.action.showAllSymbols")
+#     sleep(50ms)
+#     insert(text or "")
+
+# symbol pop all <user.text> [halt]:
+#     user.vscode("workbench.action.showAllSymbols")
+#     sleep(50ms)
+#     insert(text or "")
+#     sleep(250ms)
+#     key(enter)
+#     sleep(50ms)
