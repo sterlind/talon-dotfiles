@@ -15,77 +15,11 @@ app: vscode
 """
 ctx.tags = ["user.tabs", "user.navigation", "user.find_and_replace", "user.git", "user.scoped_navigation"]
 
-ctx.lists["user.navigation_scope"] = ["dock", "symbol"]
-
-class NavigationBase:
-    def scoped_list(self, text: str):
-        pass
-
-    def scoped_list_all(self, text: str):
-        self.scoped_list(text)
-        
-    def scoped_find(self, text: str):
-        self.scoped_list(text)
-
-    def scoped_find_all(self, text: str):
-        self.scoped_find(text)
-
-    def scoped_go(self, text: str):
-        self.scoped_list(text)
-
-    def scoped_go_all(self, text: str):
-        self.scoped_go(text)
-
-class DocumentNavigation(NavigationBase):
-    def scoped_list(self, text: str):
-        actions.user.vscode("workbench.action.quickOpen")
-        actions.sleep("50ms")
-        actions.insert(text)
-        
-    def scoped_go(self, text: str):
-        self.scoped_list(text)
-        actions.sleep("250ms")
-        actions.key("enter")
-
-class SymbolNavigation(NavigationBase):
-    def scoped_list(self, text: str):
-        actions.user.vscode("workbench.action.gotoSymbol")
-        actions.sleep("50ms")
-        actions.insert(text)
-
-    def scoped_list_all(self, text: str):
-        actions.user.vscode("workbench.action.showAllSymbols")
-        actions.sleep("50ms")
-        actions.insert(text)
-
-    def scoped_find(self, text: str):
-        self.scoped_list(text)
-
-    def scoped_find_all(self, text: str):
-        self.scoped_list_all(text)
-        
-    def scoped_go(self, text: str):
-        self.scoped_list(text)
-        actions.sleep("250ms")
-        actions.key("enter")
-
-    def scoped_go_all(self, text: str):
-        self.scoped_list_all(text)
-        actions.sleep("250ms")
-        actions.key("enter")
-
-navigators = {
-    "dock": DocumentNavigation(),
-    "symbol": SymbolNavigation()
+ctx.lists["user.navigation_scope"] = {
+    "dock": "document",
+    "symbol": "symbol"
 }
-    
-def dispatch_navigator(scope: str, function_name: str):
-    if not scope in navigators:
-        return
-    navigator = navigators[scope]
-    action = getattr(navigator, function_name, lambda text: None)
-    return action
-    
+
 @mod.action_class
 class Actions:
     def insert_snippet(snippet: Union[str, list[str]]):
@@ -126,18 +60,37 @@ class UserActions:
         actions.user.vscode("git.pull")
         
     # Navigation scopes:
-    def scoped_list(scope: str, text: str):
-        dispatch_navigator(scope, "scoped_list")(text)
-    def scoped_list_all(scope: str, text: str):
-        dispatch_navigator(scope, "scoped_list_all")(text)
-    def scoped_find(scope: str, text: str):
-        dispatch_navigator(scope, "scoped_find")(text)
-    def scoped_find_all(scope: str, text: str):
-        dispatch_navigator(scope, "scoped_find_all")(text)
-    def scoped_go(scope: str, text: str):
-        dispatch_navigator(scope, "scoped_go")(text)
-    def scoped_go_all(scope: str, text: str):
-        dispatch_navigator(scope, "scoped_go_all")(text)
+    def scoped_document_list(text: str):
+        actions.user.vscode("workbench.action.quickOpen")
+        actions.sleep("50ms")
+        actions.insert(text)
+    def scoped_document_find(text: str):
+        actions.self.scoped_document_list(text)
+    def scoped_document_go(text: str):
+        actions.self.scoped_document_list(text)
+        actions.sleep("250ms")
+        actions.key("enter")
+
+    def scoped_symbol_list(text: str):
+        actions.user.vscode("workbench.action.gotoSymbol")
+        actions.sleep("50ms")
+        actions.insert(text)
+    def scoped_symbol_list_all(text: str):
+        actions.user.vscode("workbench.action.showAllSymbols")
+        actions.sleep("50ms")
+        actions.insert(text)
+    def scoped_symbol_find(text: str):
+        actions.self.scoped_symbol_list(text)
+    def scoped_symbol_find_all(text: str):
+        actions.self.scoped_symbol_list_all(text)
+    def scoped_symbol_go(text: str):
+        actions.self.scoped_symbol_list(text)
+        actions.sleep("250ms")
+        actions.key("enter")
+    def scoped_symbol_go_all(text: str):
+        actions.self.scoped_symbol_list_all(text)
+        actions.sleep("250ms")
+        actions.key("enter")
 
     # Find and replace:
     def find_next():

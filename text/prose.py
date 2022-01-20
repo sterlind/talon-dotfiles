@@ -11,14 +11,14 @@ def words(m) -> str:
     "Multiple words"
     return " ".join(capture_to_words(m))
 
-@mod.capture(rule="(<user.word>)+")
+@mod.capture(rule="<user.formatted_string> | <user.words>")
 def text(m) -> str:
-    "text comprising multiple words"
-    return " ".join(capture_to_words(m))
+    "Text comprising multiple words"
+    return str(m)
 
 @mod.capture(rule="(<user.unmodified_word> | <user.number> | {user.key_punctuation} | <phrase>)+")
 def prose(m) -> str:
-    """captures generic prose"""
+    """Captures generic prose"""
     return format_phrase(capture_to_words(m))
 
 def format_phrase(words: List[str]) -> str:
