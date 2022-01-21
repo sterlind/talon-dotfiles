@@ -1,7 +1,4 @@
-from talon import Module, Context, actions, grammar
-import re
-from typing import List
-from functools import reduce
+from talon import Module, Context
 
 mod = Module()
 ctx = Context()
@@ -10,9 +7,9 @@ ctx = Context()
 def number_word(m) -> str:
     return str(m.number)
 
-@mod.capture(rule="(abbreviate|brief|abbrieve) {user.abbreviation}")
+@mod.capture(rule="(abbreviate|brief|abbrieve) {user.abbreviations}")
 def abbreviated_word(m) -> str:
-    return m.abbreviation
+    return m.abbreviations
     
 @mod.capture(rule="spell (<user.letter>)+ [over]")
 def spelled_word(m) -> str:
