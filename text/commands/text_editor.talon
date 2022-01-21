@@ -9,8 +9,8 @@ redo that: edit.redo()
 # Navigation commands
 go <user.navigation_direction>: user.go_direction(navigation_direction)
 go <user.navigation_direction> <number_small>: user.go_direction(navigation_direction, number_small)
-head: edit.line_start()
-tail: edit.line_end()
+[go] head: edit.line_start()
+[go] tail: edit.line_end()
 
 (select|take) <user.navigation_direction>: user.select_direction(navigation_direction)
 (select|take) <user.navigation_direction> <number_small>: user.select_direction(navigation_direction, number_small)

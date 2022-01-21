@@ -39,11 +39,11 @@ def get_list_from_csv(filename: str):
 mod = Module()
 ctx = Context()
 
-mod.list("abbreviations", "List of abbreviations")
-ctx.lists["self.abbreviations"] = get_list_from_csv("abbreviations.csv")
+mod.list("abbreviations", desc = "List of abbreviations")
+ctx.lists["user.abbreviations"] = get_list_from_csv("abbreviations.csv")
 
-mod.list("vocabulary", "List of vocabulary")
-ctx.lists["self.vocabulary"] = get_list_from_csv("vocabulary.csv")
+mod.list("vocabulary", desc = "List of vocabulary")
+ctx.lists["user.vocabulary"] = get_list_from_csv("vocabulary.csv")
 
-mod.list("extensions", "List of extensions")
-ctx.lists["self.extensions"] = get_list_from_csv("extensions.csv")
+mod.list("extensions", desc = "List of extensions")
+ctx.lists["user.extensions"] = get_list_from_csv("extensions.csv")

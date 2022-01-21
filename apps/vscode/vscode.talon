@@ -46,15 +46,18 @@ nope: key(ctrl-z)
 redo: key(ctrl-y)
 
 # File commands
-file create sibling: user.vscode("explorer.newFile")
-file rename:
+file rename [<user.filename>]:
     user.vscode("fileutils.renameFile")
     sleep(150ms)
+    insert(filename or "")
 file move:
-	  user.vscode("fileutils.moveFile")
-	  sleep(150ms)
+	user.vscode("fileutils.moveFile")
+	sleep(150ms)
 folder new: user.vscode("explorer.newFolder")
-file new: user.vscode("explorer.newFile")
+file new [<user.filename>]:
+    user.vscode("explorer.newFile")
+    sleep(150ms)
+    insert(filename or "")
 file open folder: user.vscode("revealFileInOS")
 file reveal: user.vscode("workbench.files.action.showActiveFileInExplorer")
 save: user.vscode("workbench.action.files.saveWithoutFormatting")
@@ -79,42 +82,3 @@ result previous: key(shift-f4)
 
 ref last:                        user.vscode("references-view.prev")
 ref next:                        user.vscode("references-view.next")
-
-# Navigation commands
-# {user.keyword_list} (file|dock) [<user.text>] [over]:
-#     user.vscode("workbench.action.quickOpen")
-#     sleep(50ms)
-#     insert(text or "")
-
-# {user.keyword_go} (file|dock) [<user.text>] [over]:
-#     user.vscode("workbench.action.quickOpen")
-#     sleep(50ms)
-#     insert(text or "")
-#     key(enter)
-#     sleep(50ms)
-
-# symbol hunt [<user.text>] [over]:
-#     user.vscode("workbench.action.gotoSymbol")
-#     sleep(50ms)
-#     insert(text or "")
-
-# symbol pop <user.text> [over]:
-#     user.vscode("workbench.action.gotoSymbol")
-#     sleep(50ms)
-#     insert(text or "")
-#     sleep(250ms)
-#     key(enter)
-#     sleep(50ms)
-
-# symbol hunt all [<user.text>] [halt]:
-#     user.vscode("workbench.action.showAllSymbols")
-#     sleep(50ms)
-#     insert(text or "")
-
-# symbol pop all <user.text> [halt]:
-#     user.vscode("workbench.action.showAllSymbols")
-#     sleep(50ms)
-#     insert(text or "")
-#     sleep(250ms)
-#     key(enter)
-#     sleep(50ms)

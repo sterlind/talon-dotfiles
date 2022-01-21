@@ -28,17 +28,17 @@ def capitalized_word(m) -> str:
     "Capitalized modifier for words (put other modifiers here)"
     return m.unmodified_word.capitalize()
 
-@mod.capture(rule="{user.vocabulary} | <user.abbreviated_word> | <user.spelled_word> | <user.number_word> | <user.literal_word>")
+@mod.capture(rule="<user.abbreviated_word> | <user.spelled_word> | <user.number_word> | <user.literal_word>")
 def prefixed_word(m) -> str:
     """Prefixed word (keyword occurs before)"""
     return str(m)
 
-@mod.capture(rule="(<user.prefixed_word> | <word>)")
+@mod.capture(rule="(<user.prefixed_word> | <user.file_extension> | {user.vocabulary} | <word>)")
 def unmodified_word(m) -> str:
     "Single word"
     return str(m)
-
-@mod.capture(rule = "<user.capitalized_word> | <user.prefixed_word> | <user.file_extension> | <word>")
+    
+@mod.capture(rule = "<user.capitalized_word> | <user.unmodified_word>")
 def word(m) -> str:
     "Single word"
     return str(m)
