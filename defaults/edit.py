@@ -127,3 +127,7 @@ class EditActions:
             return s.get()
         except clip.NoChange:
             return ""
+        
+    def line_insert_down():
+        actions.edit.line_end()
+        actions.key("enter")
