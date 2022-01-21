@@ -13,6 +13,11 @@ action(app.tab_reopen): user.vscode("workbench.action.reopenClosedEditor")
 action(app.window_close): user.vscode("workbench.action.closeWindow")
 action(app.window_open): user.vscode("workbench.action.newWindow")
 
+# Meta commands
+please [<user.text>]:
+    user.vscode("workbench.action.showCommands")
+    insert(user.text or "")
+
 # Split
 split up:                        user.vscode("workbench.action.moveEditorToAboveGroup")
 split down:                      user.vscode("workbench.action.moveEditorToBelowGroup")

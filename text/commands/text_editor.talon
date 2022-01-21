@@ -39,11 +39,11 @@ prince:
     insert("<>")
     edit.left()
 
-curl:
+bracks:
     insert("{}")
     edit.left()
 
-square:
+box:
     insert("[]")
     edit.left()
 

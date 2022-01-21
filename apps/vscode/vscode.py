@@ -20,16 +20,6 @@ ctx.lists["user.navigation_scope"] = {
     "symbol": "symbol"
 }
 
-@mod.action_class
-class Actions:
-    def insert_snippet(snippet: Union[str, list[str]]):
-        "inserts a snippet"
-        lines = snippet
-        if not isinstance(snippet, list):
-            lines = [l.lstrip(" ") for l in snippet.split("\n")]
-        snippet = "\n".join(lines)
-        actions.user.vscode("editor.action.insertSnippet", {"snippet": snippet})
-
 @ctx.action_class("win")
 class WinActions:
     def filename():
@@ -39,6 +29,11 @@ class WinActions:
             
 @ctx.action_class("user")
 class UserActions:
+    # Snippet support
+    def insert_formatted_snippet(snippet: str):
+        actions.user.vscode("editor.action.insertSnippet", {"snippet": snippet})
+        
+    # Navigation support
     def go_back():
         actions.user.vscode("workbench.action.navigateBack")
     def go_forward():

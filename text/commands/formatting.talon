@@ -8,3 +8,5 @@ word <word>: "{word}"
 
 <user.capitalized_word>: "{capitalized_word}"
 <user.prefixed_word>: "{prefixed_word}"
+
+filename <user.filename>: "{filename}"
