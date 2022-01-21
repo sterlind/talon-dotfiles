@@ -3,6 +3,10 @@ from talon import Module, Context
 mod = Module()
 ctx = Context()
 
+@mod.capture(rule="dot {user.extensions}")
+def file_extension(m) -> str:
+    return f".{m.extensions}"
+
 @mod.capture(rule="(num|number) <number>")
 def number_word(m) -> str:
     return str(m.number)
@@ -24,7 +28,7 @@ def capitalized_word(m) -> str:
     "Capitalized modifier for words (put other modifiers here)"
     return m.unmodified_word.capitalize()
 
-@mod.capture(rule="{self.vocabulary} | <user.abbreviated_word> | <user.spelled_word> | <user.number_word> | <user.literal_word>")
+@mod.capture(rule="{user.vocabulary} | <user.abbreviated_word> | <user.spelled_word> | <user.number_word> | <user.literal_word>")
 def prefixed_word(m) -> str:
     """Prefixed word (keyword occurs before)"""
     return str(m)
@@ -34,7 +38,7 @@ def unmodified_word(m) -> str:
     "Single word"
     return str(m)
 
-@mod.capture(rule = "<user.capitalized_word> | <user.prefixed_word> | <word>")
+@mod.capture(rule = "<user.capitalized_word> | <user.prefixed_word> | <user.file_extension> | <word>")
 def word(m) -> str:
     "Single word"
     return str(m)

@@ -35,11 +35,11 @@ prince:
     insert("()")
     edit.left()
 
-angles:
+(angle|diamond):
     insert("<>")
     edit.left()
 
-brace:
+curl:
     insert("{}")
     edit.left()
 
