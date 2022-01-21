@@ -10,9 +10,5 @@ class AppActions:
         actions.key('alt-space n')
     def window_hide_others():
         actions.key('win-d alt-tab')
-    def window_next():
-        actions.key('alt-`')
     def window_open():
         actions.key('ctrl-n')
-    def window_previous():
-        actions.key('alt-shift-`')
