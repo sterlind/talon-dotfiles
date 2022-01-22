@@ -1,13 +1,10 @@
-from talon import Module, actions
+from talon import Module
 
 mod = Module()
 mod.tag("imperative_language")
 
 @mod.action_class
 class UserActions:
-    def code_constructor():
-        """Inserts a constructor snippet"""
-
     def code_statement_variable_assign(name: str, value: str = None):
         """Inserts a variable assignment"""
 
