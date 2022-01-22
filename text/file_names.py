@@ -5,6 +5,7 @@ mod = Module()
 file_naming_conventions = {
     "py": "SNAKE_CASE",
     "talon": "SNAKE_CASE",
+    "cs": "HAMMER_CASE"
 }
 
 @mod.capture(rule="<user.text> dot {user.extensions}")
