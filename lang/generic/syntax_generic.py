@@ -5,15 +5,8 @@ mod = Module()
 mod.tag("generic_language")
 
 mod.list("keywords", "grammar keywords")
-mod.list("infix_other_operators", "Binary infix operators besides logical ones")
-mod.list("infix_logical_operators", "Infix logical operators")
-mod.list("unary_operators", "Unary prefix operators")
 mod.list("constants", "Simple language constants")
 mod.list("known_functions", "Known function names")
-
-@mod.capture(rule="{user.infix_other_operators} | {user.infix_logical_operators} | {user.unary_operators}")
-def operator_syntax(m) -> str:
-    return str(m)
 
 @mod.capture(rule="<user.word>+ [{user.keywords}]")
 def raw_name_syntax(m) -> List[str]:
@@ -57,18 +50,6 @@ def call_syntax(m) -> str:
         return f"{m.function_name_syntax}({m.arguments_syntax})"
     except AttributeError:
         return f"{m.function_name_syntax}()"
-
-@mod.capture(rule="{user.unary_operators} <user.value_syntax>")
-def unary_logic_syntax(m) -> str:
-    return str(m)
-
-@mod.capture(rule="<user.value_syntax> {user.infix_logical_operators} <user.value_syntax>")
-def binary_logic_syntax(m) -> str:
-    return str(m)
-
-@mod.capture(rule="<user.unary_logic_syntax> | <user.binary_logic_syntax> | <user.value_syntax>")
-def logic_syntax(m) -> str:
-    return str(m)
 
 @mod.capture(rule="string [<user.formatters_code>] <user.word_separated_string> [{user.keywords}]")
 def string_constant_syntax(m) -> str:
