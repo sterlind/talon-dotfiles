@@ -9,11 +9,14 @@ redo that: edit.redo()
 # Navigation commands
 go <user.navigation_direction>: user.go_direction(navigation_direction)
 go <user.navigation_direction> <number_small>: user.go_direction(navigation_direction, number_small)
+<user.compass_navigation_direction> [<number_small>]: user.go_direction(compass_navigation_direction, number_small or 1)
+
 [go] head: edit.line_start()
 [go] tail: edit.line_end()
 
 (select|take) <user.navigation_direction>: user.select_direction(navigation_direction)
 (select|take) <user.navigation_direction> <number_small>: user.select_direction(navigation_direction, number_small)
+(select|take) <user.compass_navigation_direction> [<number_small>]: user.select_direction(compass_navigation_direction, number_small or 1)
 (select|take) all: edit.select_all()
 (select|take) last: user.history_select_last_phrase()
 
@@ -35,7 +38,7 @@ prince:
     insert("()")
     edit.left()
 
-(angle|diamond):
+(angle|diamond|dime):
     insert("<>")
     edit.left()
 
@@ -43,7 +46,7 @@ bracks:
     insert("{}")
     edit.left()
 
-box:
+(box|square):
     insert("[]")
     edit.left()
 

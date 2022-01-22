@@ -1,6 +1,11 @@
 tag: user.python
 -
 
+settings():
+    user.constant_formatter = "UPPER_CASE,SNAKE_CASE"
+    user.variable_formatter = "SNAKE_CASE"
+    user.class_formatter = "HAMMER_CASE"
+
 # Import statements
 import <user.compound_name_syntax>: user.insert_snippet("import {compound_name_syntax}\n$0")
 also import <user.value_syntax> (and <user.value_syntax>)*:

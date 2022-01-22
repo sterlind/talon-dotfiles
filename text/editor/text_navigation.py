@@ -29,10 +29,25 @@ ctx.lists["self.cardinal_direction"] = {
     "down": "3"
 }
 
+mod.list("compass_direction")
+ctx.lists["self.compass_direction"] = {
+    "west": "0",
+    "east": "1",
+    "north": "2",
+    "south": "3"
+}
+
 @mod.capture(rule = "[{user.navigation_type}] {user.cardinal_direction}")
 def navigation_direction(m) -> List[str]:
     nav_type = getattr(m, "navigation_type", "CHARACTER")
     nav_direction = int(m.cardinal_direction)
+    key_list = navigation_types[nav_type][nav_direction]
+    return [key_list] if isinstance(key_list, str) else key_list
+
+@mod.capture(rule = "{user.compass_direction} [{user.navigation_type}]")
+def compass_navigation_direction(m) -> List[str]:
+    nav_type = getattr(m, "navigation_type", "CHARACTER")
+    nav_direction = int(m.compass_direction)
     key_list = navigation_types[nav_type][nav_direction]
     return [key_list] if isinstance(key_list, str) else key_list
 
