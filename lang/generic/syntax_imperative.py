@@ -8,6 +8,12 @@ class UserActions:
     def code_statement_variable_assign(name: str, value: str = None):
         """Inserts a variable assignment"""
 
+    def code_statement_return_nothing():
+        """Inserts a empty return statement"""
+
+    def code_statement_return(expression: str = None):
+        """Inserts a return statement"""
+        
     def code_block_if(expression: str = None):
         """Inserts an if block"""
 

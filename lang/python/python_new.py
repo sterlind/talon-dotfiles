@@ -13,7 +13,8 @@ ctx.tags = [
     "user.class_language",
     "user.type_language",
     "user.expression_language",
-    "user.statement_language"
+    "user.statement_language",
+    "user.imperative_language"
 ]
 
 ctx.lists["self.primitive_type"] = {
@@ -107,7 +108,7 @@ def insert_placeholders(*args):
         else:
             count += 1
             result.append(f"${count}")
-    return tuple(result)
+    return tuple(result) if len(result) > 1 else result[0]
 
 @ctx.action_class("user")
 class UserActions:
@@ -129,6 +130,12 @@ class UserActions:
         actions.user.insert_snippet(f"# {text}")
     
     # Expression syntax:
+    def code_format_unary_operation(operator: str, expression: str = None):
+        return f"{operator} {expression}"
+    
+    def code_format_binary_operation(operator: str, left: str = None, right: str = None):
+        return f"{left} {operator} {right}"
+        
     def code_expression_list_comprehension(expression: str = None, key: str = None, iterator: str = None):
         expression, key, iterator = insert_placeholders(expression, key, iterator)
         actions.user.insert_snippet(f"[{expression} for {key} in {iterator}]")
@@ -168,3 +175,34 @@ class UserActions:
 
     def code_declare_function(name: str):
         actions.user.insert_snippet(f"def {name}($1)$2:\n\t$0")
+    
+    # Imperative syntax:
+    def code_statement_variable_assign(name: str, value: str = None):
+        value = insert_placeholders(value)
+        actions.user.insert_snippet(f"{name} = {value}")
+
+    def code_statement_return_nothing():
+        actions.insert("return")
+
+    def code_statement_return(expression: str = None):
+        expression = insert_placeholders(expression)
+        actions.user.insert_snippet(f"return {expression}")
+        
+    def code_block_if(expression: str = None):
+        expression = insert_placeholders(expression)
+        actions.user.insert_snippet(f"if {expression}:\n\t")
+        
+    def code_block_while(expression: str = None):
+        expression = insert_placeholders(expression)
+        actions.user.insert_snippet(f"while {expression}:\n\t")
+        
+    def code_block_for(name: str = None, expression: str = None):
+        name, expression = insert_placeholders(expression, name)
+        actions.user.insert_snippet(f"for {name} in {expression}:\n\t")
+
+    def code_block_try_catch():
+        actions.user.insert_snippet(f"try:\n\t$1\nexcept $2:\n\t$3\n")
+
+    def code_block_scope(name: str, value: str = None):
+        value = insert_placeholders(value)
+        actions.user.insert_snippet(f"with {value} as {name}:\n\t")

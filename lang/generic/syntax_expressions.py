@@ -21,11 +21,11 @@ def infix_operator_syntax(m) -> str:
     
 @mod.capture(rule="{user.unary_operators} <user.value_syntax>")
 def unary_logic_syntax(m) -> str:
-    return str(m)
+    return actions.user.code_format_unary_operation(m.unary_operators, m.value_syntax)
 
 @mod.capture(rule="<user.value_syntax> {user.infix_logical_operators} <user.value_syntax>")
 def binary_logic_syntax(m) -> str:
-    return str(m)
+    return actions.user.code_format_binary_operation(m.infix_logical_operators, m.value_syntax_1, m.value_syntax_2)
 
 @mod.capture(rule="<user.unary_logic_syntax> | <user.binary_logic_syntax> | <user.value_syntax>")
 def logic_syntax(m) -> str:
@@ -56,6 +56,12 @@ def called_function_syntax(m) -> str:
 
 @mod.action_class
 class UserActions:
+    def code_format_unary_operation(operator: str, expression: str = None):
+        """Formats a unary operation"""
+    
+    def code_format_binary_operation(operator: str, left: str = None, right: str = None):
+        """Formats a binary operation"""
+        
     def code_expression_list_comprehension(expression: str = None, key: str = None, iterator: str = None):
         """Makes a list comprehension expression"""
 
