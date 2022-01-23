@@ -1,30 +1,18 @@
 tag: user.imperative_language
 -
 
-# Control flow
-if [call]: user.insert_snippet("if $1:\n\t$0")
-if <user.logic_syntax>: user.insert_snippet("if {logic_syntax}:\n\t$0")
+if [call]: user.code_block_if()
+if <user.logic_syntax>: user.code_block_if(logic_syntax)
 
-make for: user.insert_snippet("for $1 in $2:\n\t$0")
-for <user.name_syntax> in:
-    user.insert_snippet("for {name_syntax} in $1:\n\t$2")
-for <user.name_syntax> in <user.name_syntax>:
-    user.insert_snippet("for {name_syntax_1} in {name_syntax_2}:\n\t$1")
+make for: user.code_block_for()
+for <user.name_syntax> in: user.code_block_for(name_syntax)
+for <user.name_syntax> in <user.value_syntax>: user.code_block_for(name_syntax, value_syntax)
 
-make while: user.insert_snippet("while $1:\n\t$0")
-while <user.value_syntax>: insert("while {value_syntax}:\n\t")
+make while: user.code_block_while()
+while <user.value_syntax>: user.code_block_while(value_syntax)
 
-make try: user.insert_snippet("try:\n\t$1\nexcept $2:\n\t$3")
+make try: user.code_block_try_catch()
 
-with as <user.name_syntax>:
-    user.insert_snippet("with $1 as {name_syntax}:\n\t$0")
+with as <user.name_syntax>: user.code_block_scope(name_syntax)
 
 make pass: insert("pass")
-
-# Function declaration
-funk <user.name_syntax>:
-    user.insert_snippet("def {name_syntax}($1)$2:")
-[which] takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
-    user.code_parameter(parameter_syntax_list)
-also takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
-    user.code_parameter(parameter_syntax_list, ", ")

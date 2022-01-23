@@ -2,7 +2,7 @@ from talon import Module, actions, settings
 from typing import List
 
 mod = Module()
-mod.tag("language_expressions")
+mod.tag("expression_language")
 
 mod.list("constants", "Simple language constants")
 mod.list("known_functions", "Known function names")
@@ -66,3 +66,9 @@ class UserActions:
 
     def code_expression_binary_infix_operator(operator: str, left: str = None, right: str = None):
         """Makes a binary operator expression"""
+
+    def code_expression_function_call(function_name: str):
+        """Makes a function call expression"""
+
+    def code_expression_index(index: str = None):
+        """Appends an index to an expression"""

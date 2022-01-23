@@ -14,7 +14,7 @@ class UserActions:
     def code_block_while(expression: str = None):
         """Inserts a while loop"""
 
-    def code_block_for(expression: str = None):
+    def code_block_for(name: str = None, expression: str = None):
         """Inserts a for loop"""
 
     def code_block_try_catch():

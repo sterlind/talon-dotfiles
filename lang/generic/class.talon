@@ -1,6 +1,6 @@
 tag: user.class_language
 -
 
-make class <user.class_syntax>: user.insert_snippet("class {class_syntax}:\n\t$0")
+make class <user.class_syntax>: user.code_declare_class(class_syntax)
 
-constructor: user.insert_snippet("def __init__($1)$2:")
+constructor: user.code_declare_constructor()

@@ -1,6 +1,7 @@
 from talon import Module, actions, settings
 
 mod = Module()
+mod.tag("statement_language")
 
 mod.setting("function_formatter", str)
 
