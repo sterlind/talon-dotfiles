@@ -174,7 +174,7 @@ class UserActions:
             actions.user.insert_snippet(f"import {module}")
 
     def code_declare_function(name: str):
-        actions.user.insert_snippet(f"def {name}($1)$2:\n\t$0")
+        actions.user.insert_snippet(f"def {name}($1)$2:")
     
     # Imperative syntax:
     def code_statement_variable_assign(name: str, value: str = None):
@@ -205,4 +205,11 @@ class UserActions:
 
     def code_block_scope(name: str, value: str = None):
         value = insert_placeholders(value)
-        actions.user.insert_snippet(f"with {value} as {name}:\n\t")
+        actions.user.insert_snippet(f"with {value} as {name}:")
+    
+    # Class syntax:
+    def code_declare_class(name: str):
+        actions.user.insert_snippet(f"class {name}:")
+    
+    def code_declare_constructor():
+        actions.user.insert_snippet(f"def __init__(self$0):")
