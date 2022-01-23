@@ -1,11 +1,12 @@
 from talon import Module
+from typing import Union
 
 mod = Module()
 mod.tag("imperative_language")
 
 @mod.action_class
 class UserActions:
-    def code_statement_variable_assign(name: str, value: str = None):
+    def code_statement_variable_assign(name: Union[str, list[str]], value: str = None):
         """Inserts a variable assignment"""
 
     def code_statement_return_nothing():

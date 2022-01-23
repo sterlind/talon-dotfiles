@@ -5,7 +5,8 @@ mod = Module()
 
 
 extension_lang_map = {
-    ".py": "python"
+    ".py": "python",
+    ".ts": "typescript"
 }
 
 # Create a context for each defined language

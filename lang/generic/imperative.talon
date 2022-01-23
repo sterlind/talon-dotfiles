@@ -2,9 +2,10 @@ tag: user.imperative_language
 -
 
 # Variable assignment
-(set|var) <user.compound_name_syntax> (to|is): user.code_statement_variable_assign(compound_name_syntax)
-(set|var) <user.compound_name_syntax> (to|is) <user.value_syntax>:
-    user.code_statement_variable_assign(compound_name_syntax, value_syntax)
+(set|var) <user.compound_name_syntax> (and <user.compound_name_syntax>)* (to|is):
+    user.code_statement_variable_assign(compound_name_syntax_list)
+(set|var) <user.compound_name_syntax> (and <user.compound_name_syntax>) (to|is) <user.value_syntax>:
+    user.code_statement_variable_assign(compound_name_syntax_list, value_syntax)
 
 return nothing: user.code_statement_return_nothing()
 return: user.code_statement_return()

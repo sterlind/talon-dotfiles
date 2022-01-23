@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from talon import Module, Context, actions
 from ..util import insert_placeholders 
 
@@ -167,8 +167,10 @@ class UserActions:
         actions.user.insert_snippet(f"def {name}($1)$2:")
     
     # Imperative syntax:
-    def code_statement_variable_assign(name: str, value: str = None):
+    def code_statement_variable_assign(name: Union[str, list[str]], value: str = None):
         value = insert_placeholders(value)
+        if not isinstance(name, str):
+            name = ", ".join(name)            
         actions.user.insert_snippet(f"{name} = {value}")
 
     def code_statement_return_nothing():
