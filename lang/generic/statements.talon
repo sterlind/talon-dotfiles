@@ -10,8 +10,8 @@ from <user.compound_name_syntax> import <user.name_syntax> ([and] <user.name_syn
 
 # Function declaration
 funk <user.name_syntax>:
-    user.code_declare_import(name_syntax)
+    user.code_declare_function(name_syntax)
 [which] takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
-    user.code_format_list_append(parameter_syntax_list)
+    user.code_format_list(parameter_syntax_list)
 also takes <user.parameter_syntax> (and <user.parameter_syntax>)*:
     user.code_format_list_append(parameter_syntax_list)

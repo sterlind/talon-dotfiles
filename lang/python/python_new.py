@@ -1,0 +1,170 @@
+from typing import List
+from talon import Module, Context, actions
+
+mod = Module()
+ctx = Context()
+
+ctx.matches = r"""
+tag: user.python
+"""
+
+ctx.tags = [
+    "user.generic_language",
+    "user.class_language",
+    "user.type_language",
+    "user.expression_language",
+    "user.statement_language"
+]
+
+ctx.lists["self.primitive_type"] = {
+    "string": "str",
+    "int": "int",
+    "bool": "bool",
+    "boolean": "bool",
+}
+
+ctx.lists["self.complex_type"] = {
+    "list": "List",
+    "set": "set"
+}
+
+ctx.lists["self.keywords"] = [
+    "type",
+    "arg",
+    "funk",
+    "and",
+    "dot",
+    "call",
+    "takes",
+    "also",
+    "returns",
+    "from",
+    "map",
+    "array",
+    "try",
+    "set",
+    "state",
+    "op",
+    "index"
+    # "class"
+]
+
+ctx.lists["self.infix_other_operators"] = {
+    "plus": "+",
+    "minus": "-",
+    "times": "*",
+    "divides": "/",
+    "assign": "="
+}
+
+ctx.lists["self.infix_logical_operators"] = {
+    "less": "<",
+    "less than": "<",
+    "more": ">",
+    "greater than": ">",
+    "less equal": "<=",
+    "is greater or equal to": ">=",
+    "greater equals": ">=",
+    "equal": "==",
+    "is not": "!=",
+    "is not equal to": "!=",
+    "not equals": "!=",
+    "or": "or",
+    "and": "and",
+    "in": "in"
+}
+
+ctx.lists["self.unary_operators"] = {
+    "not": "not"
+}
+
+ctx.lists["self.constants"] = {
+    "true": "True",
+    "false": "False",
+    "none": "None",
+    "empty string": "\"\"",
+    "empty array": "[]",
+    "empty list": "[]",
+    "empty dictionary": "{}",
+    "empty dict": "{}",
+    "empty map": "{}",
+}
+
+ctx.lists["self.known_functions"] = {
+    "string": "str",
+    "int": "int",
+    "length": "len",
+    "is instance": "isinstance",
+    "get adder": "getattr"
+}
+
+def insert_placeholders(*args):
+    result = []
+    count = 0
+    for arg in args:
+        if arg:
+            result.append(arg)
+        else:
+            count += 1
+            result.append(f"${count}")
+    return tuple(result)
+
+@ctx.action_class("user")
+class UserActions:
+    def format_parameter_syntax(name: str, type: str = None):
+        if type:
+            return f"{name}: {type}"
+        else:
+            return name
+
+    def code_declare_import(module: str, named_imports: List[str]):
+        names = ", ".join(named_imports)
+        actions.user.insert_snippet(f"from {module} import {names}")
+    
+    # Generic syntax:
+    def code_document(text: str):
+        actions.user.insert_snippet(f"\"\"\"{text}\"\"\"")
+
+    def code_comment(text: str):
+        actions.user.insert_snippet(f"# {text}")
+    
+    # Expression syntax:
+    def code_expression_list_comprehension(expression: str = None, key: str = None, iterator: str = None):
+        expression, key, iterator = insert_placeholders(expression, key, iterator)
+        actions.user.insert_snippet(f"[{expression} for {key} in {iterator}]")
+
+    def code_expression_ternary(true_expression: str = None, false_expression: str = None, condition: str = None):
+        true_expression, condition, false_expression = insert_placeholders(true_expression, condition, false_expression)
+        actions.user.insert_snippet(f"{true_expression} if {condition} else {false_expression}")
+        
+    def code_expression_lambda(parameters: List[str] = None):
+        parameters = ", ".join(parameters) if parameters else "$1"
+        actions.user.insert_snippet(f"lambda {parameters}: $0")
+
+    def code_expression_unary_operator(operator: str, expression: str = None):
+        expression = insert_placeholders(expression)
+        actions.user.insert_snippet(f"{operator} {expression}")
+        
+    def code_expression_binary_infix_operator(operator: str, left: str = None, right: str = None):
+        left, right = insert_placeholders(left, right)
+        actions.user.insert_snippet(f"{left} {operator} {right}")
+
+    def code_expression_function_call(function_name: str):
+        actions.user.insert_snippet(f"{function_name}($1)")
+
+    def code_expression_index(index: str = None):
+        if index:
+            actions.user.insert_snippet(f"[{index}]")
+        else:
+            actions.user.insert_snippet("[$0]")
+        
+    # Statement syntax:
+    def code_declare_import(module: str, named_imports: list[str] = None):
+        if named_imports:
+            named_imports = ", ".join(named_imports)
+            actions.user.insert_snippet(f"from {module} import {named_imports}")
+        else:
+            actions.user.insert_snippet(f"import {module}")
+
+    def code_declare_function(name: str):
+        actions.user.insert_snippet(f"def {name}($1)$2:\n\t$0")

@@ -31,15 +31,14 @@ def compound_name_syntax(m) -> str:
 
 @mod.action_class
 class UserActions:
-    def code_format_list(elements: list[str]):
+    def code_format_list(elements: list[str]) -> str:
         """Formats a list of elements"""
-        parameters = ", ".join(elements)
-        actions.insert(parameters)
+        actions.user.insert_snippet(", ".join(elements))
 
     def code_format_list_append(elements: list[str]):
         """Formats an appended list of elements"""
         parameters = ", ".join(elements)
-        actions.insert(", " + parameters)
+        actions.user.insert_snippet(", " + parameters)
         
     def code_document(text: str):
         """Formal documentation"""

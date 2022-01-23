@@ -14,6 +14,10 @@ mod.list("unary_operators", "Unary prefix operators")
 @mod.capture(rule="{user.infix_other_operators} | {user.infix_logical_operators} | {user.unary_operators}")
 def operator_syntax(m) -> str:
     return str(m)
+
+@mod.capture(rule="{user.infix_other_operators} | {user.infix_logical_operators}")
+def infix_operator_syntax(m) -> str:
+    return str(m)
     
 @mod.capture(rule="{user.unary_operators} <user.value_syntax>")
 def unary_logic_syntax(m) -> str:
