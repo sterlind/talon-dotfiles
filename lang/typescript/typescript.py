@@ -68,19 +68,20 @@ ctx.lists["self.infix_logical_operators"] = {
     "is not": "!=",
     "is not equal to": "!=",
     "not equals": "!=",
-    "or": "or",
-    "and": "and",
+    "or": "||",
+    "and": "&&",
     "in": "in"
 }
 
 ctx.lists["self.unary_operators"] = {
-    "not": "not"
+    "not": "!"
 }
 
 ctx.lists["self.constants"] = {
-    "true": "True",
-    "false": "False",
-    "none": "None",
+    "true": "true",
+    "false": "false",
+    "none": "null",
+    "null": "null",
     "empty string": "\"\"",
     "empty array": "[]",
     "empty list": "[]",
@@ -92,10 +93,15 @@ ctx.lists["self.constants"] = {
 ctx.lists["self.known_functions"] = {
 }
 
+BLOCK_PATTERN = "{$0\n}"
+
 @ctx.action_class("user")
 class UserActions:
     def format_parameter_syntax(name: str, type: str = None):
-        return f"{name}: {type}"
+        if type:
+            return f"{name}: {type}"
+        else:
+            return name
 
     # Generic syntax:
     def code_document(text: str):        
@@ -106,7 +112,7 @@ class UserActions:
     
     # Expression syntax:
     def code_format_unary_operation(operator: str, expression: str = None):
-        return f"{operator} {expression}"
+        return f"{operator}{expression}"
     
     def code_format_binary_operation(operator: str, left: str = None, right: str = None):
         return f"{left} {operator} {right}"
@@ -147,9 +153,13 @@ class UserActions:
             actions.user.insert_snippet(f"import * from \"{module}\";")
 
     def code_declare_function(name: str):
-        actions.user.insert_snippet(f"function {name}($1)$2 {{\n\t$0\n}}")
+        actions.user.insert_snippet(f"function {name}($1)$2 {BLOCK_PATTERN}")
     
     # Imperative syntax:
+    def code_statement_variable_declare(name: Union[str, list[str]], value: str = None):
+        value = insert_placeholders(value)
+        actions.user.insert_snippet(f"var {name} = {value};")
+
     def code_statement_variable_assign(name: Union[str, list[str]], value: str = None):
         value = insert_placeholders(value)
         actions.user.insert_snippet(f"{name} = {value};")
@@ -163,18 +173,18 @@ class UserActions:
         
     def code_block_if(expression: str = None):
         expression = insert_placeholders(expression)
-        actions.user.insert_snippet(f"if ({expression}) {{\n\t$0\n}}")
+        actions.user.insert_snippet(f"if ({expression}) {BLOCK_PATTERN}")
         
     def code_block_while(expression: str = None):
         expression = insert_placeholders(expression)
-        actions.user.insert_snippet(f"while ({expression}) {{\n\t$0\n}}")
+        actions.user.insert_snippet(f"while ({expression}) {BLOCK_PATTERN}")
         
     def code_block_for(name: str = None, expression: str = None):
         name, expression = insert_placeholders(name, expression)
-        actions.user.insert_snippet(f"for (const {name} of {expression}) {{\n\t$0\n}}")
+        actions.user.insert_snippet(f"for (const {name} of {expression}) {BLOCK_PATTERN}")
 
     def code_block_try_catch():
-        actions.user.insert_snippet(f"try {{\n\t$1\n}} catch ($2) {{\n\t$3\n}}")
+        actions.user.insert_snippet(f"try {{\n\t$1\n}} catch ($2) {BLOCK_PATTERN}")
 
     def code_block_scope(name: str, value: str = None):
         pass

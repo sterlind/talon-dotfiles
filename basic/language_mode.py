@@ -38,6 +38,7 @@ class CodeActions:
 class Actions:
     def code_set_language_mode(language: str):
         """Sets the active language mode, and disables extension matching"""
+        actions.user.code_clear_language_mode()
         ctx.tags = [f"user.{language}_forced"]
         actions.user.notify(f"Enabled {language} mode")
 

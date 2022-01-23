@@ -12,6 +12,9 @@ not mode: sleep
     mode.enable("command")
 
 # Language modes
-^force python$: user.code_set_language_mode("python")
+^force python$:
+    user.code_set_language_mode("python")
+^force typescript$:
+    user.code_set_language_mode("typescript")
 ^clear language mode$:
     user.code_clear_language_mode()

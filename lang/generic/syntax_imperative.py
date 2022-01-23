@@ -6,6 +6,9 @@ mod.tag("imperative_language")
 
 @mod.action_class
 class UserActions:
+    def code_statement_variable_declare(name: Union[str, list[str]], value: str = None):
+        """Inserts a variable declaration"""
+
     def code_statement_variable_assign(name: Union[str, list[str]], value: str = None):
         """Inserts a variable assignment"""
 

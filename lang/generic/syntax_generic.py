@@ -13,7 +13,7 @@ mod.list("keywords", "grammar keywords")
 def raw_name_syntax(m) -> List[str]:
     return m.word_list
 
-@mod.capture(rule="const <user.raw_name_syntax>")
+@mod.capture(rule="(const|constant) <user.raw_name_syntax>")
 def constant_name_syntax(m) -> str:
     return actions.user.format_text(m.raw_name_syntax, settings.get("user.constant_formatter"))
 
