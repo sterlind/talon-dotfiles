@@ -71,8 +71,8 @@ ctx.lists["self.infix_logical_operators"] = {
     "is not": "!=",
     "is not equal to": "!=",
     "not equals": "!=",
-    "or": "or",
-    "and": "and",
+    "lore": "or",
+    "land": "and",
     "in": "in"
 }
 
@@ -97,7 +97,8 @@ ctx.lists["self.known_functions"] = {
     "int": "int",
     "length": "len",
     "is instance": "isinstance",
-    "get adder": "getattr"
+    "get adder": "getattr",
+    "repper": "repr"
 }
 
 @ctx.action_class("user")
@@ -143,8 +144,12 @@ class UserActions:
         actions.user.insert_snippet(f"{operator} {expression}")
         
     def code_expression_binary_infix_operator(operator: str, left: str = None, right: str = None):
-        left, right = insert_placeholders(left, right)
-        actions.user.insert_snippet(f"{left} {operator} {right}")
+        if not left:
+            right = insert_placeholders(right)
+            actions.user.insert_snippet(f" {operator} {right}")
+        else:
+            right = insert_placeholders(right)
+            actions.user.insert_snippet(f"{left} {operator} {right}")
 
     def code_expression_function_call(function_name: str):
         actions.user.insert_snippet(f"{function_name}($1)")

@@ -31,7 +31,7 @@ def binary_logic_syntax(m) -> str:
 def logic_syntax(m) -> str:
     return str(m)
     
-@mod.capture(rule="<user.compound_name_syntax> ([and] <user.compound_name_syntax>)*")
+@mod.capture(rule="<user.compound_name_syntax> (and <user.compound_name_syntax>)*")
 def arguments_syntax(m) -> List[str]:
     return m.compound_name_syntax_list
 
@@ -44,10 +44,23 @@ def string_constant_syntax(m) -> str:
     return f"\"{text}\""
 
 @mod.capture(rule="{user.constants} | <user.string_constant_syntax> | <user.compound_name_syntax> | <number>")
-def value_syntax(m) -> str:
+def value_syntax_l1(m) -> str:
     return str(m)
 
-@mod.capture(rule=" <user.compound_name_syntax> | {user.known_functions} ")
+@mod.capture(rule="<user.infix_operator_syntax> <user.value_syntax_l1>")
+def value_syntax_l2_tail(m) -> str:
+    return actions.user.code_format_binary_operation(m.infix_operator_syntax, "", m.value_syntax_l1)
+
+@mod.capture(rule="<user.value_syntax_l1> (<user.value_syntax_l2_tail>)*")
+def value_syntax(m) -> str:
+    tail = getattr(m, "value_syntax_l2_tail_list", None)
+    if tail:
+        tail = " ".join(tail)
+        return f"{m.value_syntax_l1} {tail}"
+    else:
+        return m.value_syntax_l1
+
+@mod.capture(rule="<user.compound_name_syntax> | {user.known_functions}")
 def called_function_syntax(m) -> str:
     function_name = getattr(m, "known_functions", None)
     if not function_name:
