@@ -1,12 +1,12 @@
 from typing import List
 from talon import Module, Context, actions
-from ..util import insert_placeholders 
+from ..util import insert_placeholders
 
 mod = Module()
 ctx = Context()
 
 ctx.matches = r"""
-tag: user.python
+tag: user.typescript
 """
 
 ctx.tags = [
@@ -25,10 +25,7 @@ ctx.lists["self.primitive_type"] = {
     "boolean": "bool",
 }
 
-ctx.lists["self.complex_type"] = {
-    "list": "List",
-    "set": "set"
-}
+ctx.lists["self.complex_type"] = {}
 
 ctx.lists["self.keywords"] = [
     "type",
@@ -93,113 +90,98 @@ ctx.lists["self.constants"] = {
 }
 
 ctx.lists["self.known_functions"] = {
-    "string": "str",
-    "int": "int",
-    "length": "len",
-    "is instance": "isinstance",
-    "get adder": "getattr"
 }
 
 @ctx.action_class("user")
 class UserActions:
     def format_parameter_syntax(name: str, type: str = None):
-        if type:
-            return f"{name}: {type}"
-        else:
-            return name
+        return f"{name}: {type}"
 
     def code_declare_import(module: str, named_imports: List[str]):
         names = ", ".join(named_imports)
-        actions.user.insert_snippet(f"from {module} import {names}")
+        actions.user.insert_snippet(f"import {names} from \"{module}\";")
     
     # Generic syntax:
-    def code_document(text: str):
-        actions.user.insert_snippet(f"\"\"\"{text}\"\"\"")
+    def code_document(text: str):        
+        actions.user.insert_snippet(f"/**\n * {text}$1\n */\n$0")
 
     def code_comment(text: str):
-        actions.user.insert_snippet(f"# {text}")
+        actions.user.insert_snippet(f"// {text}")
     
     # Expression syntax:
     def code_format_unary_operation(operator: str, expression: str = None):
-        return f"{operator} {expression}"
-    
-    def code_format_binary_operation(operator: str, left: str = None, right: str = None):
-        return f"{left} {operator} {right}"
-        
-    def code_expression_list_comprehension(expression: str = None, key: str = None, iterator: str = None):
-        expression, key, iterator = insert_placeholders(expression, key, iterator)
-        actions.user.insert_snippet(f"[{expression} for {key} in {iterator}]")
-
-    def code_expression_ternary(true_expression: str = None, false_expression: str = None, condition: str = None):
-        true_expression, condition, false_expression = insert_placeholders(true_expression, condition, false_expression)
-        actions.user.insert_snippet(f"{true_expression} if {condition} else {false_expression}")
-        
-    def code_expression_lambda(parameters: List[str] = None):
-        parameters = ", ".join(parameters) if parameters else "$1"
-        actions.user.insert_snippet(f"lambda {parameters}: $0")
-
-    def code_expression_unary_operator(operator: str, expression: str = None):
         expression = insert_placeholders(expression)
         actions.user.insert_snippet(f"{operator} {expression}")
+    
+    def code_format_binary_operation(operator: str, left: str = None, right: str = None):
+        actions.user.insert_snippet(f"{left} {operator} {right}")
+        
+    def code_expression_list_comprehension(expression: str = None, key: str = None, iterator: str = None):
+        pass
+
+    def code_expression_ternary(true_expression: str = None, false_expression: str = None, condition: str = None):
+        actions.user.insert_snippet(f"{condition} ? {true_expression} : {false_expression}")
+        
+        
+    def code_expression_lambda(parameters: List[str] = None):
+        pass
+        pass
+
+    def code_expression_unary_operator(operator: str, expression: str = None):
+        pass
+        pass
         
     def code_expression_binary_infix_operator(operator: str, left: str = None, right: str = None):
-        left, right = insert_placeholders(left, right)
-        actions.user.insert_snippet(f"{left} {operator} {right}")
+        pass
+        pass
 
     def code_expression_function_call(function_name: str):
-        actions.user.insert_snippet(f"{function_name}($1)")
+        pass
 
     def code_expression_index(index: str = None):
-        if index:
-            actions.user.insert_snippet(f"[{index}]")
-        else:
-            actions.user.insert_snippet("[$0]")
+        pass
         
     # Statement syntax:
     def code_declare_import(module: str, named_imports: list[str] = None):
-        if named_imports:
-            named_imports = ", ".join(named_imports)
-            actions.user.insert_snippet(f"from {module} import {named_imports}")
-        else:
-            actions.user.insert_snippet(f"import {module}")
+        pass
 
     def code_declare_function(name: str):
-        actions.user.insert_snippet(f"def {name}($1)$2:")
+        pass
     
     # Imperative syntax:
     def code_statement_variable_assign(name: str, value: str = None):
-        value = insert_placeholders(value)
-        actions.user.insert_snippet(f"{name} = {value}")
+        pass
+        pass
 
     def code_statement_return_nothing():
-        actions.insert("return")
+        pass
 
     def code_statement_return(expression: str = None):
-        expression = insert_placeholders(expression)
-        actions.user.insert_snippet(f"return {expression}")
+        pass
+        pass
         
     def code_block_if(expression: str = None):
-        expression = insert_placeholders(expression)
-        actions.user.insert_snippet(f"if {expression}:\n\t")
+        pass
+        pass
         
     def code_block_while(expression: str = None):
-        expression = insert_placeholders(expression)
-        actions.user.insert_snippet(f"while {expression}:\n\t")
+        pass
+        pass
         
     def code_block_for(name: str = None, expression: str = None):
-        name, expression = insert_placeholders(expression, name)
-        actions.user.insert_snippet(f"for {name} in {expression}:\n\t")
+        pass
+        pass
 
     def code_block_try_catch():
-        actions.user.insert_snippet(f"try:\n\t$1\nexcept $2:\n\t$3\n")
+        pass
 
     def code_block_scope(name: str, value: str = None):
-        value = insert_placeholders(value)
-        actions.user.insert_snippet(f"with {value} as {name}:")
+        pass
+        pass
     
     # Class syntax:
     def code_declare_class(name: str):
-        actions.user.insert_snippet(f"class {name}:")
+        pass
     
     def code_declare_constructor():
-        actions.user.insert_snippet(f"def __init__(self$0):")
+        pass
