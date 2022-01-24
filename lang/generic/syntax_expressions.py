@@ -93,5 +93,12 @@ class UserActions:
     def code_expression_function_call(function_name: str):
         """Makes a function call expression"""
 
+    def code_expression_function_call_list(function_names: list[str]):
+        """Makes a chain of function call expression"""
+        # We have to do this because otherwise "call" gets incorporated into the function name.
+        # If precedence is changed, then we can drop this
+        for name in function_names:
+            actions.user.code_expression_function_call(name)
+
     def code_expression_index(index: str = None):
         """Appends an index to an expression"""

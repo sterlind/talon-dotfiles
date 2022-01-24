@@ -197,7 +197,7 @@ class UserActions:
         actions.user.insert_snippet(f"while {expression}:\n\t")
         
     def code_block_for(name: str = None, expression: str = None):
-        name, expression = insert_placeholders(expression, name)
+        name, expression = insert_placeholders(name, expression)
         actions.user.insert_snippet(f"for {name} in {expression}:\n\t")
 
     def code_block_try_catch():

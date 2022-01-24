@@ -5,7 +5,7 @@ tag: user.expression_language
 value <user.value_syntax>: insert(value_syntax)
 
 # Function call
-call <user.called_function_syntax>: user.code_expression_function_call(called_function_syntax)
+(call <user.called_function_syntax>)+: user.code_expression_function_call_list(called_function_syntax_list)
 pass <user.value_syntax> (and <user.value_syntax>)*:
     user.code_format_list(value_syntax_list)
 also (pass|arg|args) <user.value_syntax> (and <user.value_syntax>)*:
