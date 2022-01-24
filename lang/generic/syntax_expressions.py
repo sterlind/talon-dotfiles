@@ -55,6 +55,7 @@ def value_syntax_l2_tail(m) -> str:
 def value_syntax(m) -> str:
     tail = getattr(m, "value_syntax_l2_tail_list", None)
     if tail:
+        print(repr(tail))
         tail = " ".join(tail)
         return f"{m.value_syntax_l1} {tail}"
     else:

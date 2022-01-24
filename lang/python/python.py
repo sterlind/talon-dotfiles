@@ -73,6 +73,8 @@ ctx.lists["self.infix_logical_operators"] = {
     "not equals": "!=",
     "lore": "or",
     "land": "and",
+    "or": "or",
+    "and": "and",
     "in": "in"
 }
 
@@ -122,10 +124,13 @@ class UserActions:
     
     # Expression syntax:
     def code_format_unary_operation(operator: str, expression: str = None):
-        return f"{operator} {expression}"
+        if expression:
+            return f"{operator} {expression}"
+        else:
+            return operator
     
     def code_format_binary_operation(operator: str, left: str = None, right: str = None):
-        return f"{left} {operator} {right}"
+        return " ".join(filter(None, [left, operator, right]))
         
     def code_expression_list_comprehension(expression: str = None, key: str = None, iterator: str = None):
         expression, key, iterator = insert_placeholders(expression, key, iterator)
@@ -146,7 +151,7 @@ class UserActions:
     def code_expression_binary_infix_operator(operator: str, left: str = None, right: str = None):
         if not left:
             right = insert_placeholders(right)
-            actions.user.insert_snippet(f" {operator} {right}")
+            actions.user.insert_snippet(f"{operator} {right}")
         else:
             right = insert_placeholders(right)
             actions.user.insert_snippet(f"{left} {operator} {right}")
