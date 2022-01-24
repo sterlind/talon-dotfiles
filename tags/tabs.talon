@@ -22,6 +22,8 @@ tab (reopen | restore):     app.tab_reopen()
 tab close:                  app.tab_close()
 tab close others:           user.tab_close_others()
 tab close all:              user.tab_close_all()
+tab close left:             user.tab_close_left()
+tab close right:            user.tab_close_right()
 tab last close:
     app.tab_previous()
     sleep(50ms)

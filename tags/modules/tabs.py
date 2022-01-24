@@ -52,3 +52,9 @@ class TabActions:
     
     def tab_close_others():
         """Close other tabs"""
+    
+    def tab_close_left():
+        """Close tabs to the left"""
+
+    def tab_close_right():
+        """Close tabs to the right"""

@@ -44,3 +44,13 @@ class UserActions:
     
     def go_forward():
         actions.key("alt-right")
+
+    # The following require mapping in the vimium extension:
+    def tab_close_others():
+        actions.key("ctrl-alt-o")
+
+    def tab_close_left():
+        actions.key("ctrl-alt-l")
+
+    def tab_close_right():
+        actions.key("ctrl-alt-r")
