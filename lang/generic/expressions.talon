@@ -6,9 +6,9 @@ value <user.value_syntax>: insert(value_syntax)
 
 # Function call
 (call <user.called_function_syntax>)+: user.code_expression_function_call_list(called_function_syntax_list)
-pass <user.value_syntax> (and <user.value_syntax>)*:
+pass <user.value_syntax> (pass <user.value_syntax>)*:
     user.code_format_list(value_syntax_list)
-also (pass|arg|args) <user.value_syntax> (and <user.value_syntax>)*:
+also (pass|arg|args) <user.value_syntax> (pass <user.value_syntax>)*:
     user.code_format_list_append(value_syntax_list)
 
 # Operations
@@ -25,7 +25,7 @@ also (pass|arg|args) <user.value_syntax> (and <user.value_syntax>)*:
     # user.code_expression_binary_infix_operator(infix_operator_syntax, "", value_syntax)
 
 # Constants
-condition <user.explicit_condition_syntax>: insert("{explicit_condition_syntax}")
+condition <user.value_syntax>: insert("{value_syntax}")
 make {user.constants}: insert("{constants}")
 index [<user.value_syntax>]: user.code_expression_index(value_syntax or "")
 
