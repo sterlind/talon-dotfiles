@@ -17,14 +17,15 @@ also (pass|arg|args) <user.value_syntax> (and <user.value_syntax>)*:
 # op <user.operator_syntax>: user.code_expression_binary_infix_operator(operator_syntax, "", "")
 # op <user.operator_syntax> <user.value_syntax>: user.code_expression_binary_infix_operator(infix_operators, "", value_syntax)
 # op <user.value_syntax> <user.operator_syntax>: user.code_expression_binary_infix_operator(infix_operators, value_syntax, "")
-op {user.unary_operators} <user.value_syntax>: user.code_expression_unary_operator(unary_operators, value_syntax)
-op <user.value_syntax> <user.infix_operator_syntax> <user.value_syntax>:
-    user.code_expression_binary_infix_operator(infix_operator_syntax, value_syntax_1, value_syntax_2)
+# op {user.unary_operators} <user.value_syntax>: user.code_expression_unary_operator(unary_operators, value_syntax)
+# op <user.value_syntax> <user.infix_operator_syntax> <user.value_syntax>:
+    # user.code_expression_binary_infix_operator(infix_operator_syntax, value_syntax_1, value_syntax_2)
 
-op <user.infix_operator_syntax> <user.value_syntax>:
-    user.code_expression_binary_infix_operator(infix_operator_syntax, "", value_syntax)
+# op <user.infix_operator_syntax> <user.value_syntax>:
+    # user.code_expression_binary_infix_operator(infix_operator_syntax, "", value_syntax)
 
 # Constants
+condition <user.explicit_condition_syntax>: insert("{explicit_condition_syntax}")
 make {user.constants}: insert("{constants}")
 index [<user.value_syntax>]: user.code_expression_index(value_syntax or "")
 

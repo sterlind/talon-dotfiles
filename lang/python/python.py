@@ -51,7 +51,7 @@ ctx.lists["self.keywords"] = [
     # "class"
 ]
 
-ctx.lists["self.infix_other_operators"] = {
+ctx.lists["self.infix_arithmetic_operators"] = {
     "plus": "+",
     "minus": "-",
     "times": "*",
@@ -78,7 +78,7 @@ ctx.lists["self.infix_logical_operators"] = {
     "in": "in"
 }
 
-ctx.lists["self.unary_operators"] = {
+ctx.lists["self.unary_logical_operators"] = {
     "not": "not"
 }
 

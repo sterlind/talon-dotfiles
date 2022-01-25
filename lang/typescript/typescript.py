@@ -48,7 +48,7 @@ ctx.lists["self.keywords"] = [
     # "class"
 ]
 
-ctx.lists["self.infix_other_operators"] = {
+ctx.lists["self.infix_arithmetic_operators"] = {
     "plus": "+",
     "minus": "-",
     "times": "*",
