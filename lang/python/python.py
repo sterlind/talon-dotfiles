@@ -182,7 +182,7 @@ class UserActions:
         actions.user.insert_snippet(f"def {name}($1)$2:")
     
     # Imperative syntax:
-    def code_statement_variable_declare(name: Union[str, list[str]], value: str = None):
+    def code_statement_variable_declare(name: Union[str, list[str]], type: str, value: str = None):
         actions.user.code_statement_variable_assign(name, value)
 
     def code_statement_variable_assign(name: Union[str, list[str]], value: str = None):

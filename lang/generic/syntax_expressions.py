@@ -14,6 +14,7 @@ def arguments_syntax(m) -> List[str]:
 def called_function_syntax(m) -> str:
     function_name = getattr(m, "known_functions", None)
     if not function_name:
+        print(repr(m.compound_name_syntax))
         function_name = actions.user.format_text(m.compound_name_syntax, settings.get("user.function_formatter"))
     return function_name
 

@@ -121,10 +121,21 @@ class UserActions:
         pass
 
     def code_expression_ternary(true_expression: str = None, false_expression: str = None, condition: str = None):
+        condition, true_expression, false_expression = insert_placeholders(condition, true_expression, false_expression)
         actions.user.insert_snippet(f"{condition} ? {true_expression} : {false_expression}")        
         
     def code_expression_lambda(parameters: List[str] = None):
-        pass
+        parameters_string = None
+        if parameters:
+            if len(parameters) > 1:
+                parameters_string = ", ".join(parameters)
+                parameters_string = f"({parameters_string})"
+            else:
+                parameters_string = parameters[0]
+        else:
+            parameters_string = "$1"
+                
+        actions.user.insert_snippet(f"{parameters_string} => $0")
 
     def code_expression_unary_operator(operator: str, expression: str = None):
         expression = insert_placeholders(expression)
@@ -156,9 +167,9 @@ class UserActions:
         actions.user.insert_snippet(f"function {name}($1)$2 {BLOCK_PATTERN}")
     
     # Imperative syntax:
-    def code_statement_variable_declare(name: Union[str, list[str]], value: str = None):
+    def code_statement_variable_declare(name: Union[str, list[str]], type: str = None, value: str = None):
         value = insert_placeholders(value)
-        actions.user.insert_snippet(f"var {name} = {value};")
+        actions.user.insert_snippet(f"{type} {name} = {value};")
 
     def code_statement_variable_assign(name: Union[str, list[str]], value: str = None):
         value = insert_placeholders(value)

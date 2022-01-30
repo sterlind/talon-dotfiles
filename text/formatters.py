@@ -13,7 +13,7 @@ formatters_list = {
     "DOUBLE_QUOTED_STRING": lambda text: f"\"{text}\"",
     "SNAKE_CASE": lambda text: format_words(text, split, "_"),
     "HAMMER_CASE": lambda text: format_words(text, split, "", capitalize, capitalize),
-    "CAMEL_CASE": lambda text: format_words(text, split, "", lower, capitalize),
+    "CAMEL_CASE": lambda text: format_words(text, split, "", none, capitalize),
     "KEBAB_CASE": lambda text: format_words(text, split, "-"),
     "SMASH_CASE": lambda text: format_words(text, split, "")
 }

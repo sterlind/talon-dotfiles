@@ -11,3 +11,13 @@ clap:
     edit.line_end()
     insert(";")
     key("enter")
+
+[declare] (const|constant) <user.compound_name_syntax> (to|is):
+    user.code_statement_variable_declare(compound_name_syntax, "const")
+[declare] (const|constant) <user.compound_name_syntax> (to|is) <user.value_syntax>:
+    user.code_statement_variable_declare(compound_name_syntax, "const", value_syntax)
+
+let <user.compound_name_syntax> (be|is):
+    user.code_statement_variable_declare(compound_name_syntax, "let")
+let <user.compound_name_syntax> (be|is) <user.value_syntax>:
+    user.code_statement_variable_declare(compound_name_syntax, "let", value_syntax)

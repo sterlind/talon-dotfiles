@@ -4,14 +4,14 @@ tag(): user.expression_language
 
 # Variable assignment
 (set var|declare) <user.compound_name_syntax> (and <user.compound_name_syntax>)+ (to|is):
-    user.code_statement_variable_declare(compound_name_syntax_list)
+    user.code_statement_variable_declare(compound_name_syntax_list, "")
 (set var|declare) <user.compound_name_syntax> (and <user.compound_name_syntax>)+ (to|is) <user.value_syntax>:
-    user.code_statement_variable_declare(compound_name_syntax_list, value_syntax)
+    user.code_statement_variable_declare(compound_name_syntax_list, "", value_syntax)
 
 (set var|declare) <user.compound_name_syntax> (to|is):
-    user.code_statement_variable_declare(compound_name_syntax)
+    user.code_statement_variable_declare(compound_name_syntax, "")
 (set var|declare) <user.compound_name_syntax> (to|is) <user.value_syntax>:
-    user.code_statement_variable_declare(compound_name_syntax, value_syntax)
+    user.code_statement_variable_declare(compound_name_syntax, "", value_syntax)
 
 set <user.compound_name_syntax> (and <user.compound_name_syntax>)+ (to|is):
     user.code_statement_variable_assign(compound_name_syntax_list)

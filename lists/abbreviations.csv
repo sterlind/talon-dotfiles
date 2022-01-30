@@ -17,3 +17,5 @@ neg,negative
 mul,multiply
 val,value
 expr,expression
+dir,directory
+err,error
