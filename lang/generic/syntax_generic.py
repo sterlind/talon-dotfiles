@@ -8,6 +8,7 @@ mod.setting("constant_formatter", str)
 mod.setting("variable_formatter", str)
 
 mod.list("keywords", "grammar keywords")
+mod.list("symbols", "Symbols currently in scope")
 
 @mod.capture(rule="<user.word>+ [{user.keywords}]")
 def raw_name_syntax(m) -> List[str]:
