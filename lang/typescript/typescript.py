@@ -115,7 +115,6 @@ class UserActions:
         return f"{operator}{expression}"
     
     def code_format_binary_operation(operator: str, left: str = None, right: str = None):
-        
         return f"{left} {operator} {right}"
         
     def code_expression_list_comprehension(expression: str = None, key: str = None, iterator: str = None):

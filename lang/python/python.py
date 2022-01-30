@@ -56,7 +56,12 @@ ctx.lists["self.infix_arithmetic_operators"] = {
     "minus": "-",
     "times": "*",
     "divides": "/",
-    "assign": "="
+    "assign": "=",
+    "pipe": "|",
+    "amper": "&",
+    "carrot": "^",
+    "shift left": "<<",
+    "shift right": ">>",
 }
 
 ctx.lists["self.infix_logical_operators"] = {

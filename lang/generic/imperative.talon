@@ -1,5 +1,6 @@
 tag: user.imperative_language
 -
+tag(): user.expression_language
 
 # Variable assignment
 (set var|declare) <user.compound_name_syntax> (and <user.compound_name_syntax>)+ (to|is):
@@ -24,7 +25,7 @@ set <user.compound_name_syntax> (to|is) <user.value_syntax>:
 
 return nothing: user.code_statement_return_nothing()
 return: user.code_statement_return()
-return <user.value_or_condition_syntax>: user.code_statement_return(value_or_condition_syntax)
+return <user.value_syntax>: user.code_statement_return(value_syntax)
 
 if [call]: user.code_block_if()
 if <user.condition_syntax>: user.code_block_if(condition_syntax)

@@ -24,6 +24,10 @@ also (pass|arg|args) <user.value_syntax> (pass <user.value_syntax>)*:
 # op <user.infix_operator_syntax> <user.value_syntax>:
     # user.code_expression_binary_infix_operator(infix_operator_syntax, "", value_syntax)
 
+(condition|cond|bool) <user.condition_syntax>: insert("{condition_syntax}")
+op <user.binary_logic_syntax_tail>: insert(" {binary_logic_syntax_tail}")
+op <user.binary_arithmetic_syntax_tail>: insert(" {binary_arithmetic_syntax_tail}")
+
 # Constants
 condition <user.value_syntax>: insert("{value_syntax}")
 make {user.constants}: insert("{constants}")

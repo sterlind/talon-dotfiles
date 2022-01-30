@@ -27,7 +27,7 @@ def binary_logic_syntax(m) -> str:
     tail = " ".join(m.binary_logic_syntax_tail_list)
     return f"{m.value_syntax} {tail}"
 
-@mod.capture(rule="<user.value_syntax> | <user.unary_logic_syntax> | <user.binary_logic_syntax>")
+@mod.capture(rule="<user.unary_logic_syntax> | <user.binary_logic_syntax>")
 def condition_syntax(m) -> str:
     # This may be a boolean or any other kind of constant, such as a string.
     # Might want to restrict this further, but we need to keep everything in the tail.
@@ -57,7 +57,7 @@ def binary_arithmetic_syntax(m) -> str:
 #     # L2 captures L1 as well as expressions of non-logical operators (e.g. +)
 #     return str(m)
 
-@mod.capture(rule="<user.value_syntax_l1> | <user.unary_arithmetic_syntax> | <user.binary_arithmetic_syntax> | <user.unary_logic_syntax> | <user.binary_logic_syntax>")
+@mod.capture(rule="<user.value_syntax_l1> | <user.unary_arithmetic_syntax> | <user.binary_arithmetic_syntax>")
 def value_syntax(m) -> str:
     # L2 captures L1 as well as expressions of non-logical operators (e.g. +)
     return str(m)
