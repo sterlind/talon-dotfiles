@@ -18,7 +18,7 @@ if not VOCAB_PATH.exists():
     VOCAB_PATH.touch()
 
 def read_vocab_from_file(path: str) -> list[str]:
-    with resource.open(path, "r") as f:
+    with open(path, "r") as f:
         contents = []
         try:
             contents = json.loads(f.read())
@@ -28,4 +28,8 @@ def read_vocab_from_file(path: str) -> list[str]:
         print(repr(contents))
         return contents
         
-ctx.lists["user.symbols"] = read_vocab_from_file(VOCAB_PATH)
+def on_watch(path, flags):
+    if VOCAB_PATH.match(path):
+        ctx.lists["user.symbols"] = read_vocab_from_file(VOCAB_PATH)        
+
+fs.watch(VOCAB_PATH.parent, on_watch)
