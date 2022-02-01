@@ -1,0 +1,1 @@
+special <user.text>$: user.code_insert_test(user.text)
