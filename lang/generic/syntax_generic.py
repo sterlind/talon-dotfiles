@@ -22,7 +22,7 @@ def constant_name_syntax(m) -> str:
 def variable_name_syntax(m) -> str:
     return actions.user.format_text(m.raw_name_syntax, settings.get("user.variable_formatter"))
 
-@mod.capture(rule="<user.letter> | <user.constant_name_syntax> | <user.variable_name_syntax>")
+@mod.capture(rule="{user.symbols} | <user.letter> | <user.constant_name_syntax> | <user.variable_name_syntax>")
 def name_syntax(m) -> str:
     return str(m)
 
