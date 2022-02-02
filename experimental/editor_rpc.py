@@ -97,7 +97,7 @@ class RemoteActions:
             return
         
         logging.info(f"Sending RPC message [{type}]: {contents}")
-        active_client.send(type, contents)
+        run_context.context.loop.call_soon_threadsafe(active_client.send, type, contents)
 
 class RunContext:
     def __init__(self):
