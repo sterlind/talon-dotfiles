@@ -9,6 +9,7 @@ from . import run_context
 # logging.basicConfig(level=logging.DEBUG)
 
 MAX_MESSAGE_SIZE = 10 * 1024 * 1024
+REPLY_TIMEOUT = 10
 
 mod = Module()
 
@@ -17,21 +18,39 @@ class Client:
         self.reader = reader
         self.writer = writer
         self.outbound_messages = asyncio.Queue()
+        self.sequence_number = 1
+        self.waiting_responses: dict[str, asyncio.Future] = {}
     
     async def handle(self):
         await asyncio.gather(self._handle_send(), self._handle_recv())
 
-    def send(self, type: str, contents: object):
+    async def request(self, type: str, contents: object):
+        request_id = self.sequence_number
+        self.sequence_number += 1
+        logging.info(f"Submitting request #{request_id} type {type} contents {contents}")
+        self.waiting_responses[request_id] = asyncio.get_event_loop().create_future()
         message = {
+            "sequence": request_id,
             "type": type,
             "contents": contents
         }
 
         self.outbound_messages.put_nowait(message)
+        try:
+            reply = await asyncio.wait_for(
+                self.waiting_responses[request_id],
+                timeout=REPLY_TIMEOUT)
+        except asyncio.TimeoutError:
+            logging.error("Request timed out!")
+            raise
+        finally:
+            self.waiting_responses[request_id].cancel()
+            self.waiting_responses.pop(request_id)
 
-    def _handle_message(self, message: str):
-        print(message)
-        message = json.loads(message)
+        logging.info("Received reply!")
+        return reply["contents"]
+
+    def _handle_message(self, message):
         actions.user.rpc_handle_message(message["type"], message["contents"])
 
     async def _handle_send(self):
@@ -63,12 +82,21 @@ class Client:
 
             try:
                 message = message.decode("utf8")
+                message = json.loads(message)
             except UnicodeDecodeError:
                 logging.error("Unable to decode client message")
                 break
         
-            logging.info("Dispatching message.")
-            self._handle_message(message)
+            sequence_number = message["sequence"] if "sequence" in message else 0
+            if sequence_number:
+                logging.info(f"Received reply to request {sequence_number}")
+                if sequence_number in self.waiting_responses:
+                    self.waiting_responses[sequence_number].set_result(message)
+                else:
+                    logging.warn("Request was abandoned, discarding.")
+            else:
+                logging.info("Dispatching event message.")
+                self._handle_message(message)
 
 active_client = None
 
@@ -89,7 +117,7 @@ class RemoteActions:
         """Receives a message from the active window"""
         logging.info(f"Received RPC message [{type}]: {contents}")
 
-    def rpc_send_message(type: str, contents: object):
+    def rpc_send_message(type: str, contents: object) -> object:
         """Sends a message to the active window"""
         global active_client
         if not active_client:
@@ -97,7 +125,9 @@ class RemoteActions:
             return
         
         logging.info(f"Sending RPC message [{type}]: {contents}")
-        run_context.context.loop.call_soon_threadsafe(active_client.send, type, contents)
+        loop = run_context.context.loop
+        future = asyncio.run_coroutine_threadsafe(active_client.request(type, contents), loop)
+        return future.result(REPLY_TIMEOUT)
 
 class RunContext:
     def __init__(self):
