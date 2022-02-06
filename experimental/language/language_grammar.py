@@ -71,6 +71,30 @@ class TreeEditor:
                     
         return set(key for key, value in self.matchers.items() if walk_up(value, node))
 
+    def debug(self):
+        node = self.get_node_at_position()
+        ancestors = []
+        while node:
+            ancestors.insert(0, node)
+            node = node.parent
+
+        cursor = self.tree.walk()
+        level = 0
+        while cursor:
+            node = cursor.node
+            text = repr(node.text.decode("utf8"))
+            field_name = cursor.current_field_name() if node.is_named else None
+            field_name = f"<{field_name}> " if field_name else ""
+            info = f"[{node.type}] {field_name}'{text}' {node.start_point}-{node.end_point}"
+            print(" " * level + ("> " if node in ancestors else "* ") + info)
+            if cursor.goto_first_child():
+                level += 1
+            else:
+                while not cursor.goto_next_sibling():
+                    if not cursor.goto_parent():
+                        return
+                    level -= 1
+        
 editor: TreeEditor = None
 matchers = {}
 matchers["if_condition"] = lambda n: n.child_by_field_name("condition") if n.type == "if_statement" else None
@@ -108,3 +132,4 @@ class UserActions:
         scopes = editor.get_available_scopes()
         ctx.tags = list(f"user.{scope}" for scope in scopes)
         logging.info(f"Enabled the following contexts: {ctx.tags}")
+        editor.debug()
