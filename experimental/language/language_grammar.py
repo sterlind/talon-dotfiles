@@ -38,46 +38,35 @@ class TreeEditor:
         self.matchers = matchers
         self.cursor = cursor
 
-    def move_cursor_to_scope(self, scope: str) -> Cursor:
+    def move_cursor_to_scope(self, scope: str, selector) -> Cursor:
         if not scope in self.matchers:
             return None
         matcher = self.matchers[scope]
-        node = self.get_node_at_position()
-        while node:
-            selected = matcher(node)
-            if selected:
-                return Cursor(selected.end_point)                
-            node = node.parent
-        return None
+        selected = self.run_matcher(matcher)
+        return selector(selected) if selected else None
+        
+    def get_available_scopes(self) -> set[str]:
+        return set(key for key, value in self.matchers.items() if self.run_matcher(value))
     
-    def get_node_at_position(self, position: Cursor = None) -> Node:
+    def get_nodes_in_range(self, position: Cursor = None):
         position = position or self.cursor
-        def walk(node):
+
+        def walk(node, level):
             for child in node.children:
                 if Cursor(child.start_point) <= position and Cursor(child.end_point) >= position:
-                    return walk(child)
-            return node
-        
-        return walk(self.tree.root_node)
+                    yield from walk(child, level + 1)                
+            yield (node, level)
 
-    def get_available_scopes(self) -> set[str]:
-        node = self.get_node_at_position()
-        def walk_up(matcher, node):
-            while node:
-                if matcher(node):                    
-                    return True                
-                node = node.parent
-            return False
-                    
-        return set(key for key, value in self.matchers.items() if walk_up(value, node))
+        return map(lambda p: p[0], sorted(walk(self.tree.root_node, 0), lambda p: -p[1]))
+
+    def run_matcher(self, matcher, position: Cursor = None) -> Node:
+        for node in self.get_nodes_in_range(position):
+            result = matcher(node)
+            if result:
+                return result
 
     def debug(self):
-        node = self.get_node_at_position()
-        ancestors = []
-        while node:
-            ancestors.insert(0, node)
-            node = node.parent
-
+        nodes_in_range = set(self.get_nodes_in_range())
         cursor = self.tree.walk()
         level = 0
         while cursor:
@@ -86,7 +75,7 @@ class TreeEditor:
             field_name = cursor.current_field_name() if node.is_named else None
             field_name = f"<{field_name}> " if field_name else ""
             info = f"[{node.type}] {field_name}'{text}' {node.start_point}-{node.end_point}"
-            print(" " * level + ("> " if node in ancestors else "* ") + info)
+            print(" " * level + ("> " if node in nodes_in_range else "* ") + info)
             if cursor.goto_first_child():
                 level += 1
             else:
@@ -96,21 +85,44 @@ class TreeEditor:
                     level -= 1
         
 editor: TreeEditor = None
-matchers = {}
-matchers["if_condition"] = lambda n: n.child_by_field_name("condition") if n.type == "if_statement" else None
+
+# def condition_matcher(node):
+#     if not node.parent:
+#         return None
+#     if node.parent.type != "if_statement":
+#         return None
+#     if node.parent.child_by_field_name("consequence") != node:
+#         return node.parent.child_by_field_name("condition")
+
+def condition_matcher(node):
+    if node.parent and node.parent.child_by_field_name("condition") == node:
+        return node        
+
+def block_matcher(node):
+    if node.type == "block":
+        return node
+
+matchers = {
+    "condition": condition_matcher
+}
+
+positions = {
+    "start": lambda n: Cursor(n.start_point),
+    "end": lambda n: Cursor(n.end_point)
+}
 
 for name in matchers.keys():
     mod.tag(name, desc="Grammar context tag")
 
 @mod.action_class
 class Actions:
-    def lang_insert_at_scope(scope: str, snippet: str):
+    def lang_insert_at_scope(scope: str, position: str, snippet: str):
         """Inserts a snippet at a particular scope"""
-        global editor
+        global editor, positions
         if not editor:
             return
 
-        cursor = editor.move_cursor_to_scope(scope)
+        cursor = editor.move_cursor_to_scope(scope, positions[position])
         actions.user.rpc_send_message("insert", {
             "text": snippet,
             "position": {
