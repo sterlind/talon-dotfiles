@@ -51,7 +51,10 @@ class Client:
         return reply["contents"]
 
     def _handle_message(self, message):
-        actions.user.rpc_handle_message(message["type"], message["contents"])
+        try:
+            actions.user.rpc_handle_message(message["type"], message["contents"])
+        except Exception as ex:
+            logging.error(ex, exc_info=True)        
 
     async def _handle_send(self):
         while True:

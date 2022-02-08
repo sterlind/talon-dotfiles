@@ -21,7 +21,7 @@ class Cursor:
         return not (self == other)
         
     def __lt__(self, other):
-        return self.line < other.line or self.character < other.character
+        return self.line < other.line or (self.line == other.line and self.character < other.character)
 
     def __gt__(self, other):
         return other < self
@@ -31,6 +31,9 @@ class Cursor:
 
     def __ge__(self, other):
         return self > other or self == other
+    
+    def __str__(self):
+        return f"({self.line}, {self.character})"
         
 class TreeEditor:
     def __init__(self, tree: Tree, matchers: dict, cursor: Cursor):
@@ -57,7 +60,7 @@ class TreeEditor:
                     yield from walk(child, level + 1)                
             yield (node, level)
 
-        return map(lambda p: p[0], sorted(walk(self.tree.root_node, 0), lambda p: -p[1]))
+        return map(lambda p: p[0], sorted(walk(self.tree.root_node, 0), key = lambda p: -p[1]))
 
     def run_matcher(self, matcher, position: Cursor = None) -> Node:
         for node in self.get_nodes_in_range(position):
@@ -66,9 +69,10 @@ class TreeEditor:
                 return result
 
     def debug(self):
-        nodes_in_range = set(self.get_nodes_in_range())
+        nodes_in_range = list(self.get_nodes_in_range())
         cursor = self.tree.walk()
         level = 0
+        print(f"Cursor: {self.cursor}")
         while cursor:
             node = cursor.node
             text = repr(node.text.decode("utf8"))
@@ -95,8 +99,15 @@ editor: TreeEditor = None
 #         return node.parent.child_by_field_name("condition")
 
 def condition_matcher(node):
+    if not node.parent:
+        return
+    condition_field = node.parent.child_by_field_name("condition")
+    print("siblings:")
+    print("".join(str(n) for n in node.parent.children))
+    print("info:")
+    print(f"{repr(node.parent)} {node} {condition_field}")
     if node.parent and node.parent.child_by_field_name("condition") == node:
-        return node        
+        return node
 
 def block_matcher(node):
     if node.type == "block":
