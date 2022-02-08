@@ -103,7 +103,7 @@ def condition_matcher(node):
         return
     condition_field = node.parent.child_by_field_name("condition")
     print("siblings:")
-    print("".join(str(n) for n in node.parent.children))
+    print(node.parent.children)
     print("info:")
     print(f"{repr(node.parent)} {node} {condition_field}")
     if node.parent and node.parent.child_by_field_name("condition") == node:
