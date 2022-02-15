@@ -1,0 +1,27 @@
+sentinel = "_"
+
+[matcher.condition]
+target_tags = ["primitive_value", "logic_prefix_operator"]
+next_tags = ["logic_infix_operator"]
+query = '''
+((if_statement
+    "if" @include
+    condition: [(identifier) (integer) (none) (true) (false) (float) (call)] @target-include
+    ":" @include) @match)
+'''
+
+[matcher.logic_operand]
+target_tags = ["primitive_value", "logic_prefix_operator"]
+next_tags = ["logic_infix_operator"]
+query = '''
+(not_operator argument: (_) @target-include) @match
+(boolean_operator
+    left: (_) @target-include
+    right: (_) @target-include) @match
+'''
+
+[matcher.comparison]
+next_tags = ["logic_infix_operator"]
+query = '''
+(comparison_operator) @target-include-match
+'''
