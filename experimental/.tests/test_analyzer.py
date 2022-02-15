@@ -1,6 +1,9 @@
+from helpers import ROOT_PATH
+from pathlib import Path
+
 import re
 from tree_sitter import Language, Parser, Tree, Node
-from ..syntax.analyzer import Analyzer, Config, parse_config
+from syntax.analyzer import Analyzer, Config, parse_config
 
 TEST_PATTERN = r"^\s*(#)\s+([<^]-)\s*(\S+)"
 
@@ -28,20 +31,20 @@ class MatcherTest:
                 print(line_text)
                 print(f"location: {cursor} expected: {set(trait_names)} actual: {results.keys()}")
 
-Language.build_library(
-    "build/languages.dll",
-    [
-        "tree-sitter-python"
-    ]
-)
+# Language.build_library(
+#     "build/languages.dll",
+#     [
+#         "tree-sitter-python"
+#     ]
+# )
 
-PYTHON_LANGUAGE = Language("build/languages.dll", "python")
+PYTHON_LANGUAGE = Language("../build/languages.dll", "python")
 
-with open("python.toml", "r") as f:
+with open(ROOT_PATH / "config" / "python.toml", "r") as f:
     config = parse_config(f)
     analyzer = Analyzer(PYTHON_LANGUAGE, config)
 
-with open("example.py", "r") as f:
+with open(ROOT_PATH / ".tests" / "example.py", "r") as f:
     text = f.read()
     harness = MatcherTest(text)
 
