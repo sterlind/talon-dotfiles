@@ -119,7 +119,7 @@ class Analyzer:
         return results        
     
     def normalize(text: str) -> str:
-        return text.replace("\n", "\r\n")
+        return text.replace("\r\n", "\n")
         
     def insert_sentinel(self, text: str, cursor: tuple[int, int]):
         row, column = cursor
