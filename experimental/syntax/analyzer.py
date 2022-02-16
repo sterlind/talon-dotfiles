@@ -84,6 +84,16 @@ class Scanner:
 
         return result            
 
+@dataclass
+class PlaceholderNode:
+    start_point: tuple[int, int]
+    end_point: tuple[int, int]
+    text: bytes
+
+    def __init__(self, cursor: tuple[int, int]):
+        self.start_point = cursor
+        self.end_point = cursor
+        self.text = "$0".encode("utf8")
 class Analyzer:
     def __init__(self, lang: Language, config: Config):
         self.parser = Parser()
@@ -95,8 +105,16 @@ class Analyzer:
         text = Analyzer.normalize(text)
         tree = self.parser.parse(text.encode("utf8"))
         results = self.scanner.matches(tree.root_node, cursor, None)
+
         tree = self.parser.parse(self.insert_sentinel(text, cursor).encode("utf8"))
         results_next = self.scanner.matches(tree.root_node, cursor, self.sentinel)
+        def replace_sentinel(n):
+            if n.start_point == cursor and n.text.decode("utf8") == self.sentinel:
+                return PlaceholderNode(cursor)
+            return n
+        
+        results_next = {key: replace_sentinel(node) for key, node in results_next.items()}
+
         merge_matches(results, results_next)
         return results        
     

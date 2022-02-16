@@ -26,6 +26,7 @@ class EditorState:
     def send_replace_message(self, scope: str, snippet: str):
         node = self.scopes[scope]
         text = snippet.replace("$$", node.text.decode("utf8").strip())
+
         actions.user.rpc_send_message("replaceRange", {
             "range": {
                 "start": {

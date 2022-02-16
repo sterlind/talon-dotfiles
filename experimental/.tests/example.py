@@ -1,3 +1,4 @@
+x = 0
 if :
 #  ^- primitive_value,logic_prefix_operator
     pass
