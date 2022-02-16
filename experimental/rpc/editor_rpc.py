@@ -99,6 +99,8 @@ class Client:
                     logging.warn("Request was abandoned, discarding.")
             else:
                 logging.info("Dispatching event message.")
+                global active_client
+                active_client = self
                 self._handle_message(message)
 
 active_client = None
