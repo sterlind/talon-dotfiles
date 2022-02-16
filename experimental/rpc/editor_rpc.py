@@ -47,8 +47,9 @@ class Client:
             self.waiting_responses[request_id].cancel()
             self.waiting_responses.pop(request_id)
 
-        logging.info("Received reply!")
-        return reply["contents"]
+        result = reply["contents"] if "contents" in reply else None
+        logging.info(f"Received reply! {result}")
+        return result
 
     def _handle_message(self, message):
         try:

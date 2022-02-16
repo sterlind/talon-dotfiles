@@ -11,6 +11,17 @@ def load_language(name: str) -> Analyzer:
     config = parse_config(CONFIG_PATH / f"{name}.toml")
     return Analyzer(lang, config)
 
+mod = Module()
+ctx = Context()
+
+mod.tag("suggestions_active")
+
+mod.list("top_level_symbols")
+ctx.lists["user.top_level_symbols"] = []
+
+mod.list("suggestions")
+ctx.lists["user.suggestions"] = []
+
 class EditorState:
     def __init__(self, analyzers: dict[str, Analyzer]):
         self.scopes = {}
@@ -18,6 +29,7 @@ class EditorState:
 
     def receive(self, language: str, text: str, cursor: tuple[int, int]):
         self.scopes = self.analyzers[language].get_scopes(text, cursor)
+        self._update_tags()
     
     def send_replace_message(self, scope: str, snippet: str):
         node = self.scopes[scope]
@@ -36,10 +48,34 @@ class EditorState:
             },
             "text": text
         })
-
-    def get_tags(self):
-        return [f"user.{name}" for name in self.scopes.keys()]
     
+    def code_start_completion(self):
+        suggestions = actions.user.rpc_send_message("startCompletion", None)
+        if not suggestions:
+            logging.warning("No suggestions available, aborting.")
+            return
+
+        ctx.tags = ["user.suggestions_active"]
+        ctx.lists["user.suggestions"] = suggestions
+    
+    def code_finish_completion(self, label):
+        actions.user.rpc_send_message("insertTextAtCursor", {
+            "text": label
+        })
+        self.code_abandon_completion()
+
+    def code_abandon_completion(self):
+        ctx.tags = []
+        self._update_tags()
+    
+    def _update_tags(self):
+        if "user.suggestions_active" in ctx.tags:
+            logging.warning(f"Suggestions were active, ignoring.")
+            return
+
+        ctx.tags = [f"user.{name}" for name in self.scopes.keys()]
+        logging.info(f"Enabled the following contexts: {ctx.tags}")
+
 def make_state():
     analyzers = {
         name: load_language(name) for name in [
@@ -51,12 +87,6 @@ def make_state():
 
 state = make_state()        
 
-mod = Module()
-ctx = Context()
-
-mod.list("top_level_symbols")
-ctx.lists["user.top_level_symbols"] = []
-
 @mod.action_class
 class Actions:
     def code_replace_target(scope: str, snippet: str):
@@ -64,15 +94,27 @@ class Actions:
         global state
         state.send_replace_message(scope, snippet)
 
+    def code_start_completion():
+        """Starts a completion suggestion"""
+        global state
+        state.code_start_completion()
+
+    def code_abandon_completion():
+        """Forsakes a completion suggestion"""
+        global state
+        state.code_abandon_completion()
+    
+    def code_finish_completion(label: str):
+        """Finishes a completion suggestion"""
+        global state
+        state.code_finish_completion(label)
+
 def update_editor_text(contents):
     global state
     state.receive(
         "python", # for now
         contents["text"],
         (contents["cursor"]["line"], contents["cursor"]["character"]))
-
-    ctx.tags = state.get_tags()
-    logging.info(f"Enabled the following contexts: {ctx.tags}")
 
 def update_symbols(contents):
     ctx.lists["user.top_level_symbols"] = contents
