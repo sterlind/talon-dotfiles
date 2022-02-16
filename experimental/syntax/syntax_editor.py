@@ -35,7 +35,7 @@ class EditorState:
         node = self.scopes[scope]
         text = snippet.replace("$$", node.text.decode("utf8").strip())
 
-        actions.user.rpc_send_message("replaceRange", {
+        message = {
             "range": {
                 "start": {
                     "line": node.start_point[0],
@@ -47,8 +47,14 @@ class EditorState:
                 },
             },
             "text": text
-        })
-    
+        }
+
+        reply = actions.user.rpc_send_message("replaceRange", message)
+        state.receive(
+            "python", # for now
+            reply["text"],
+            (reply["cursor"]["line"], reply["cursor"]["character"]))    
+
     def code_start_completion(self):
         suggestions = actions.user.rpc_send_message("startCompletion", None)
         if not suggestions:
