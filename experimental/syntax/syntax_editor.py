@@ -1,12 +1,8 @@
-from dataclasses import dataclass
 import logging
 from pathlib import Path
 from talon import Module, Context, actions
 from tree_sitter import Language, Parser, Tree, Node
 from .analyzer import Analyzer, Config, parse_config
-
-mod = Module()
-ctx = Context()
 
 CONFIG_PATH = Path(__file__).parent.parent / "config"
 
@@ -55,6 +51,12 @@ def make_state():
 
 state = make_state()        
 
+mod = Module()
+ctx = Context()
+
+mod.list("top_level_symbols")
+ctx.lists["user.top_level_symbols"] = []
+
 @mod.action_class
 class Actions:
     def code_replace_target(scope: str, snippet: str):
@@ -62,18 +64,30 @@ class Actions:
         global state
         state.send_replace_message(scope, snippet)
 
+def update_editor_text(contents):
+    global state
+    state.receive(
+        "python", # for now
+        contents["text"],
+        (contents["cursor"]["line"], contents["cursor"]["character"]))
+
+    ctx.tags = state.get_tags()
+    logging.info(f"Enabled the following contexts: {ctx.tags}")
+
+def update_symbols(contents):
+    ctx.lists["user.top_level_symbols"] = contents
+    logging.info(f"Symbols updated: {contents}")
+
+handlers = {
+    "editorText": update_editor_text,
+    "symbols": update_symbols
+}
+
 @ctx.action_class("user")
 class UserActions:
     def rpc_handle_message(type: str, contents: object):
-        global state
-        if type != "editorText":
-            # actions.next()
+        if not type in handlers:
+            logging.warning(f"Unable to handle message type {type}")
             return
-
-        state.receive(
-            "python", # for now
-            contents["text"],
-            (contents["cursor"]["line"], contents["cursor"]["character"]))
-
-        ctx.tags = state.get_tags()
-        logging.info(f"Enabled the following contexts: {ctx.tags}")
+        
+        handlers[type](contents)
