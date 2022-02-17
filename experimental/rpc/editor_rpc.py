@@ -1,4 +1,4 @@
-from talon import Module, actions
+from talon import Module, actions, ui
 import asyncio
 import struct
 import logging
@@ -20,7 +20,12 @@ class Client:
         self.outbound_messages = asyncio.Queue()
         self.sequence_number = 1
         self.waiting_responses: dict[str, asyncio.Future] = {}
+        self.handshake_response = asyncio.get_event_loop().create_future()
     
+    async def get_handshake(self):
+        response = await self.handshake_response
+        return response["contents"]
+        
     async def handle(self):
         await asyncio.gather(self._handle_send(), self._handle_recv())
 
@@ -91,6 +96,10 @@ class Client:
                 logging.error("Unable to decode client message")
                 break
         
+            if not self.handshake_response.done():
+                self.handshake_response.set_result(message)
+                continue
+                
             sequence_number = message["sequence"] if "sequence" in message else 0
             if sequence_number:
                 logging.info(f"Received reply to request {sequence_number}")
@@ -104,13 +113,39 @@ class Client:
                 active_client = self
                 self._handle_message(message)
 
-active_client = None
+clients: dict[int, Client] = {}
+def add_or_update_client(handshake, client: Client):
+    global clients
+    clients[handshake["pid"]] = client
+
+def remove_client(client: Client):
+    global clients
+    for key, value in clients.items():
+        if value is client:
+            clients.pop(key)
+            return
+
+active_client: Client = None
+def set_active_client(win: ui.Window):
+    global active_client, clients
+    pid = win.app.pid
+    active_client = clients[pid] if pid in clients else None
+
+ui.register("win_focus", set_active_client)
 
 async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):        
-    global active_client
     client = Client(reader, writer)
-    active_client = client
-    await client.handle()
+    handle = client.handle()
+    handshake = client.get_handshake()
+    done, _ = asyncio.wait(handle, handshake, return_when=asyncio.FIRST_COMPLETED)
+    try:
+        if handshake in done:
+            handshake = await handshake
+    finally:
+        try:
+            await handle
+        finally:
+            remove_client(client)
     
 async def run_server():
     server = await asyncio.start_server(handle_client, "localhost", 31337)
