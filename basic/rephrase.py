@@ -13,10 +13,11 @@ speech_system.register("post:phrase", on_post_phrase)
 
 @mod.action_class
 class Actions: 
-    def rephrase(phrase: Phrase, run_async: bool = False):
+    def rephrase(phrase: Phrase):
         """Re-evaluate and run phrase"""
         if not phrase:
             return
+        
         try:
             current_phrase = phrase_stack[-1]
             ts = current_phrase["_ts"]
@@ -29,7 +30,4 @@ class Actions:
         except KeyError:
             return
 
-        if run_async:
-            cron.after("0ms", lambda: speech_system._on_audio_frame(samples))
-        else:
-            speech_system._on_audio_frame(samples)
+        speech_system._on_audio_frame(samples)
