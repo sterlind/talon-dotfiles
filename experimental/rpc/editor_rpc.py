@@ -112,21 +112,25 @@ class Client:
                 self._handle_message(message)
 
 clients: dict[int, Client] = {}
-def add_or_update_client(handshake, client: Client):
+active_client: Client = None
+def add_or_update_client(client: Client, handshake):
     global clients
     clients[handshake["pid"]] = client
 
 def remove_client(client: Client):
-    global clients
+    global clients, active_client
     for key, value in clients.items():
         if value is client:
             clients.pop(key)
-            return
+            break
 
-active_client: Client = None
+    if active_client is client:
+        active_client = None
+
 def set_active_client():
     global active_client, clients
     pid = ui.active_app().pid
+    logging.info(f"Switching to app {pid}.")
     active_client = clients[pid] if pid in clients else None
 
 ui.register("win_focus", lambda _: set_active_client())
@@ -134,7 +138,8 @@ ui.register("win_focus", lambda _: set_active_client())
 async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):        
     client = Client(reader, writer)
     def on_handshake(message):
-        add_or_update_client(message["contents"]["pid"])
+        logging.info(f"Handshake received! {message}")
+        add_or_update_client(client, message["contents"])
         set_active_client()
     try:
         await client.handle(on_handshake)
