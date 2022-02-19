@@ -107,7 +107,7 @@ class Actions:
         global state
         state.send_replace_message(scope, snippet)
         if next:
-            actions.user.rephrase(next, True)
+            actions.user.rephrase(next)
 
     def code_start_completion():
         """Starts a completion suggestion"""

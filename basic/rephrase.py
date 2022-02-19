@@ -15,9 +15,7 @@ speech_system.register("post:phrase", on_post_phrase)
 class Actions: 
     def rephrase(phrase: Phrase, run_async: bool = True):
         """Re-evaluate and run phrase"""
-        if not phrase:
-            return
-        
+
         try:
             current_phrase = phrase_stack[-1]
             ts = current_phrase["_ts"]
