@@ -6,4 +6,4 @@ string <user.text>: user.code_replace_target("primitive_value", "\"{text}\"")
 ^{user.top_level_symbols} dot [<phrase>]:
     user.code_replace_target("primitive_value", "{top_level_symbols}.")
     user.code_start_completion()
-    user.rephrase(phrase or "")
+    user.rephrase(phrase)
