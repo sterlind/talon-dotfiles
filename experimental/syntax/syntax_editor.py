@@ -1,6 +1,8 @@
 import logging
 from pathlib import Path
+from typing import Union
 from talon import Module, Context, actions
+from talon.grammar import Phrase
 from tree_sitter import Language, Parser, Tree, Node
 from .analyzer import Analyzer, Config, parse_config
 
@@ -99,6 +101,13 @@ class Actions:
         """Replaces a scope node's contents with the provided snippet."""
         global state
         state.send_replace_message(scope, snippet)
+
+    def code_edit(scope: str, snippet: str, next: Union[Phrase, str]):
+        """Replaces a scope node's contents with the provided snippet."""
+        global state
+        state.send_replace_message(scope, snippet)
+        if next:
+            actions.user.rephrase(next, True)
 
     def code_start_completion():
         """Starts a completion suggestion"""

@@ -1,5 +1,5 @@
 tag: user.logic_infix_operator
 -
 
-and: user.code_replace_target("logic_infix_operator", "$$ and ")
-or: user.code_replace_target("logic_infix_operator", "$$ or ")
+^and [<phrase>]: user.code_edit("logic_infix_operator", "$$ and ", phrase or "")
+^or [<phrase>]: user.code_edit("logic_infix_operator", "$$ or ", phrase or "")

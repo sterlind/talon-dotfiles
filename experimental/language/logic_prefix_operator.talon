@@ -1,5 +1,4 @@
 tag: user.logic_prefix_operator
 -
 
-not:
-    user.code_replace_target("logic_prefix_operator", "not $$")
+^ not [<phrase>]: user.code_edit("logic_prefix_operator", "not $$", phrase or "")
