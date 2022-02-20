@@ -25,3 +25,9 @@ next_tags = ["logic_infix_operator"]
 query = '''
 (comparison_operator) @target-include-match
 '''
+
+[matcher.block]
+next_tags = ["statement"]
+query = '''
+(expression_statement) @target-include-match
+'''
