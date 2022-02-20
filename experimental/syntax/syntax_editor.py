@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 from typing import Union
-from talon import Module, Context, actions
+from talon import Module, Context, actions, resource
 from talon.grammar import Phrase
 from tree_sitter import Language, Parser, Tree, Node
 from .analyzer import Analyzer, Config, parse_config
@@ -10,7 +10,8 @@ CONFIG_PATH = Path(__file__).parent.parent / "config"
 
 def load_language(name: str) -> Analyzer:
     lang = Language("build/languages.dll", name)
-    config = parse_config(CONFIG_PATH / f"{name}.toml")
+    with resource.open(CONFIG_PATH / f"{name}.toml", "r") as f:
+        config = parse_config(f)
     return Analyzer(lang, config)
 
 mod = Module()

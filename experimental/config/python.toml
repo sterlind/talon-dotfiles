@@ -27,7 +27,7 @@ query = '''
 '''
 
 [matcher.block]
-next_tags = ["statement"]
+target_tags = ["statement"]
 query = '''
 (expression_statement) @target-include-match
 '''
