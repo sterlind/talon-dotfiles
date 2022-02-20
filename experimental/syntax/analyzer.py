@@ -94,6 +94,8 @@ class PlaceholderNode:
         self.start_point = cursor
         self.end_point = cursor
         self.text = "$0".encode("utf8")
+        self.type = "placeholder"
+
 class Analyzer:
     def __init__(self, lang: Language, config: Config):
         self.parser = Parser()

@@ -26,8 +26,18 @@ query = '''
 (comparison_operator) @target-include-match
 '''
 
-[matcher.block]
+[matcher.insert_statement]
 target_tags = ["statement"]
 query = '''
 (expression_statement) @target-include-match
+'''
+
+[matcher.append_statement]
+next_tags = ["statement"]
+transform = "enter"
+query = '''
+[
+    (expression_statement) @target-include-match
+    (if_statement consequence: (_) @target) @include-match
+]
 '''

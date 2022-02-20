@@ -34,6 +34,9 @@ class EditorState:
         self.scopes = self.analyzers[language].get_scopes(text, cursor)
         self._update_tags()
     
+    def scope_is_placeholder(self, scope: str):
+        return self.scopes[scope].type == "placeholder"
+
     def send_replace_message(self, scope: str, snippet: str):
         node = self.scopes[scope]
         text = snippet.replace("$$", node.text.decode("utf8").strip())
@@ -109,6 +112,16 @@ class Actions:
         state.send_replace_message(scope, snippet)
         if next:
             actions.user.rephrase(next)
+    
+    def code_append(scope: str, snippet_if_new: str, snippet_if_exists: str, next: Union[Phrase, str]):
+        """Inserts a snippet if the scope is just a placeholder, or use another snippet if the scope exists already"""
+        global state
+        if state.scope_is_placeholder(scope):
+            state.send_replace_message(scope, snippet_if_new)
+        else:
+            state.send_replace_message(scope, snippet_if_exists)
+        if next:
+            actions.user.rephrase(next)            
 
     def code_start_completion():
         """Starts a completion suggestion"""
