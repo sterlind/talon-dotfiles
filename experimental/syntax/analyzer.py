@@ -79,7 +79,8 @@ class Matcher:
                 target = None
                 included = False
             if "target" in labels:
-                target = node if node.text else target
+                # target = node if node.text else target
+                target = node
             if "include" in labels:
                 included = included or overlaps_cursor(node)
             if "exclude" in labels:
