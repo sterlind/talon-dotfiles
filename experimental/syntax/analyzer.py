@@ -40,7 +40,8 @@ class MatchInfo:
             node.end_point,
             node.text.decode("utf8"),
             False,
-            commands
+            commands,
+            MatchInfo._score_node(node)
         )
     
     def _score_node(node: Node):

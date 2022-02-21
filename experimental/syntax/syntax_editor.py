@@ -49,17 +49,16 @@ class EditorState:
             
         text = snippet.replace("$$", node.text.strip())
 
-        def insert_line_after():
-            global range, text
+        def insert_line_after(range):
             actions.user.rpc_send_message("insertLineAfter", {
                 "range": range
             })
-            range = None
-            text = snippet.replace("$$", "$0")
             
         for command in node.commands:
             if command == "insertLineAfter":
-                insert_line_after()                
+                insert_line_after(range)                
+                range = None
+                text = snippet.replace("$$", "$0")
 
         reply = actions.user.rpc_send_message("replaceRange", {
             "range": range,
