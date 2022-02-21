@@ -34,28 +34,38 @@ class EditorState:
         self.scopes = self.analyzers[language].get_scopes(text, cursor)
         self._update_tags()
     
-    def scope_is_placeholder(self, scope: str):
-        return self.scopes[scope].type == "placeholder"
-
     def send_replace_message(self, scope: str, snippet: str):
         node = self.scopes[scope]
-        text = snippet.replace("$$", node.text.decode("utf8").strip())
-
-        message = {
-            "range": {
-                "start": {
-                    "line": node.start_point[0],
-                    "character": node.start_point[1]
-                },
-                "end": {
-                    "line": node.end_point[0],
-                    "character": node.end_point[1]
-                },
+        range = {
+            "start": {
+                "line": node.start_point[0],
+                "character": node.start_point[1]
             },
-            "text": text
+            "end": {
+                "line": node.end_point[0],
+                "character": node.end_point[1]
+            }
         }
+            
+        text = snippet.replace("$$", node.text.strip())
 
-        reply = actions.user.rpc_send_message("replaceRange", message)
+        def insert_line_after():
+            global range, text
+            actions.user.rpc_send_message("insertLineAfter", {
+                "range": range
+            })
+            range = None
+            text = snippet.replace("$$", "$0")
+            
+        for command in node.commands:
+            if command == "insertLineAfter":
+                insert_line_after()                
+
+        reply = actions.user.rpc_send_message("replaceRange", {
+            "range": range,
+            "text": text
+        })
+
         state.receive(
             "python", # for now
             reply["text"],
@@ -113,16 +123,6 @@ class Actions:
         if next:
             actions.user.rephrase(next)
     
-    def code_append(scope: str, snippet_if_new: str, snippet_if_exists: str, next: Union[Phrase, str]):
-        """Inserts a snippet if the scope is just a placeholder, or use another snippet if the scope exists already"""
-        global state
-        if state.scope_is_placeholder(scope):
-            state.send_replace_message(scope, snippet_if_new)
-        else:
-            state.send_replace_message(scope, snippet_if_exists)
-        if next:
-            actions.user.rephrase(next)            
-
     def code_start_completion():
         """Starts a completion suggestion"""
         global state

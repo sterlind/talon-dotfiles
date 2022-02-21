@@ -34,7 +34,7 @@ query = '''
 
 [matcher.append_statement]
 next_tags = ["statement"]
-transform = "enter"
+commands = ["insertLineAfter"]
 query = '''
 [
     (expression_statement) @target-include-match

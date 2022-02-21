@@ -7,6 +7,7 @@ from tree_sitter import Language, Parser, Tree, Node
 class Pattern:
     target_tags: list[str]
     next_tags: list[str]
+    commands: list[str]
     query: str
 
 @dataclass
@@ -14,6 +15,41 @@ class Config:
     sentinel: str
     matcher: dict[str, Pattern]
     
+@dataclass
+class MatchInfo:
+    start_point: tuple[int, int]
+    end_point: tuple[int, int]
+    text: str
+    placeholder: bool
+    commands: list[str]
+    score: int
+
+    def make_placeholder(node: Node):
+        return MatchInfo(
+            node.start_point,
+            node.start_point,
+            "$0",
+            True,
+            [],
+            MatchInfo._score_node(node)
+        )
+    
+    def make_match(node: Node, commands: list[str]):
+        return MatchInfo(
+            node.start_point,
+            node.end_point,
+            node.text.decode("utf8"),
+            False,
+            commands
+        )
+    
+    def _score_node(node: Node):
+        score = 0
+        while node:
+            score += 1
+            node = node.parent
+        return score
+
 class Matcher:
     def __init__(self, query):
         self.query = query
@@ -51,17 +87,10 @@ class Matcher:
         if included and target:
             yield target
 
-def merge_matches(result: dict[str, Node], source: dict[str, Node]):
-    def score_match(node: Node):
-        score = 0
-        while node:
-            score += 1
-            node = node.parent
-        return score
-
+def merge_matches(result: dict[str, MatchInfo], source: dict[str, MatchInfo]):
     for tag, node in source.items():
         if tag in result:
-            result[tag] = max(result[tag], node, key=score_match)
+            result[tag] = max(result[tag], node, key=lambda n: n.score)
         else:
             result[tag] = node        
 
@@ -76,25 +105,17 @@ class Scanner:
         result: dict[str, Node] = {}                
         for name, matcher in self.matchers.items():
             for node in matcher.matches(root, cursor):
-                if sentinel and node.text.decode("utf8") != sentinel:
-                    continue
+                if sentinel:
+                    if node.text.decode("utf8") != sentinel:
+                        continue
+                    node = MatchInfo.make_placeholder(node)
+                else:
+                    node = MatchInfo.make_match(node, self.patterns[name].commands)                        
                     
                 tags = self.patterns[name].target_tags if sentinel else self.patterns[name].next_tags
                 merge_matches(result, {tag: node for tag in tags})
 
         return result            
-
-@dataclass
-class PlaceholderNode:
-    start_point: tuple[int, int]
-    end_point: tuple[int, int]
-    text: bytes
-
-    def __init__(self, cursor: tuple[int, int]):
-        self.start_point = cursor
-        self.end_point = cursor
-        self.text = "$0".encode("utf8")
-        self.type = "placeholder"
 
 class Analyzer:
     def __init__(self, lang: Language, config: Config):
@@ -110,13 +131,7 @@ class Analyzer:
 
         tree = self.parser.parse(self.insert_sentinel(text, cursor).encode("utf8"))
         results_next = self.scanner.matches(tree.root_node, cursor, self.sentinel)
-        def replace_sentinel(n):
-            if n.start_point == cursor and n.text.decode("utf8") == self.sentinel:
-                return PlaceholderNode(cursor)
-            return n
         
-        results_next = {key: replace_sentinel(node) for key, node in results_next.items()}
-
         merge_matches(results, results_next)
         return results        
     
@@ -138,6 +153,7 @@ def parse_config(f) -> Config:
         { key: Pattern(
             value["target_tags"] if "target_tags" in value else [], 
             value["next_tags"] if "next_tags" in value else [],
+            value["commands"] if "commands" in value else [],
             value["query"]
         ) for key, value in d["matcher"].items() }
     )
