@@ -29,7 +29,7 @@ class MatcherTest:
             results = analyzer.get_scopes(text, cursor)
             if not set(results.keys()) == set(trait_names):
                 print(line_text)
-                print(f"location: {cursor} expected: {set(trait_names)} actual: {results.keys()}")
+                print(f"location: {(cursor[0] + 1, cursor[1] + 1)} expected: {set(trait_names)} actual: {results.keys()}")
 
 # Language.build_library(
 #     "build/languages.dll",
